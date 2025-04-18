@@ -1,0 +1,313 @@
+.accountPage {
+  font-family: "Nunito", sans-serif;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px 7px rgba(0, 0, 0, 0.05);
+  width: 1600px;
+  min-height: 700px;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  position: relative;
+  z-index: 1;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.content {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px 7px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.content:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 8px 25px 10px rgba(0, 0, 0, 0.1);
+}
+
+.content img {
+  max-width: 100%;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.content img:hover {
+  transform: scale(1.02);
+}
+
+.comment {
+  margin-top: 10px;
+  padding: 10px;
+  border-left: 3px solid #007bff;
+  background-color: #f1f3f5;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.comment:hover {
+  background-color: #e9ecef;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+  background-color: #f8f9fa;
+  color: #333333;
+  font-size: 14px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+  outline: none;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 1024px) {
+  .accountPage {
+    width: 90%;
+    padding: 30px;
+    flex-direction: column;
+  }
+
+  .mainContent {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .accountPage {
+    padding: 20px;
+  }
+
+  .content {
+    padding: 15px;
+  }
+
+  .content img {
+    max-width: 100%;
+  }
+
+  .comment {
+    padding: 8px;
+  }
+
+  textarea {
+    padding: 8px;
+  }
+
+  button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 500px) {
+  .accountPage {
+    padding: 15px;
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  .content img {
+    max-width: 100%;
+  }
+
+  .comment {
+    padding: 6px;
+  }
+
+  textarea {
+    padding: 6px;
+  }
+
+  button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.profilePhoto {
+  height: 50px;
+  width: 50px;
+}
+
+.profilePhoto:hover {
+  transform: scale(1.1);
+  border-color: #007bff;
+}
+
+.profileLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.nom {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.nom:hover {
+  color: #007bff;
+}
+
+.description {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.publicationImage {
+  height: 400px;
+  width: 400px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.publicationImage:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.interestedSection {
+  margin-top: 20px;
+  padding: 15px;
+  border-top: 1px solid #e9ecef;
+  text-align: center;
+}
+
+.interestedSection h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.socialButtons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.socialButtons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  color: white;
+  width: 48%;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.socialButtons a:hover {
+  transform: translateY(-2px);
+}
+
+.whatsappButton {
+  background-color: #25d366;
+}
+
+.whatsappButton:hover {
+  background-color: #128c7e;
+}
+
+.facebookButton {
+  background-color: #1877f2;
+}
+
+.facebookButton:hover {
+  background-color: #1458b5;
+}
+
+.icon {
+  font-size: 20px;
+}
+
+.headerSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.addToCartButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background-color: #58636d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.addToCartButton:hover {
+  background-color: #2f3336;
+  transform: translateY(-2px);
+}
+
+.cartIcon {
+  font-size: 18px;
+}

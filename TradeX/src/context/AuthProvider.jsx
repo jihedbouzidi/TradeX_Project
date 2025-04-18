@@ -1,0 +1,176 @@
+/* eslint-disable react/prop-types */
+import { useState, useEffect } from 'react';
+import { AuthContext } from './AuthContext';
+import { toast } from 'react-hot-toast';
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+        }
+      } catch (error) {
+        console.error('Error loading user:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadUser();
+  }, []);
+
+  const login = async (email, password) => {
+    try {
+      const response = await fetch('http://localhost/Backend_TradeX/login.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const result = await response.json();
+
+      if (result.status === 'success') {
+        setUser(result.user);
+        localStorage.setItem('user', JSON.stringify(result.user));
+        toast.success('Connexion réussie!', {
+            position: "top-center",
+            style: {
+              background: "#000",
+              color: "#fff",
+            },
+          });
+        return true;
+      } else {
+        toast.error(result.message || 'Identifiants incorrects', {
+            position: "top-center",
+            style: {
+              background: "#000",
+              color: "#fff",
+            },
+          });
+        return false;
+      }
+    } catch (error) {
+      toast.error('Erreur de connexion au serveur', {
+        position: "top-center",
+        style: {
+          background: "#000",
+          color: "#fff",
+        },
+      });
+      console.error(error);
+      return false;
+    }
+  };
+
+  const register = async (nomPre, email, password) => {
+    try {
+      const response = await fetch('http://localhost/Backend_TradeX/register.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nomPre, email, password })
+      });
+
+      const result = await response.json();
+
+      if (result.message === 'Inscription réussie !') {
+        toast.success(result.message, {
+            position: "top-center",
+            style: {
+              background: "#000",
+              color: "#fff",
+            },
+          });
+        return true;
+      } else {
+        toast.error(result.message || 'Erreur lors de l\'inscription', {
+            position: "top-center",
+            style: {
+              background: "#000",
+              color: "#fff",
+            },
+          });
+        return false;
+      }
+    } catch (error) {
+      toast.error('Erreur de connexion au serveur', {
+        position: "top-center",
+        style: {
+          background: "#000",
+          color: "#fff",
+        },
+      });
+      console.error(error);
+      return false;
+    }
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem('user');
+    toast.success('Déconnexion réussie!', {
+      position: "top-center",
+      style: {
+        background: "#000",
+        color: "#fff",
+      },
+    });
+    return true;
+  };
+
+  const updateProfile = async (formData) => {
+    try {
+      const response = await fetch('http://localhost/Backend_TradeX/modifierPro.php', {
+        method: 'POST',
+        body: formData // Pas de Content-Type pour FormData, le navigateur le gère
+      });
+
+      const result = await response.json();
+
+      if (result.status === 'success') {
+        const updatedUser = { ...user, ...result.user };
+        setUser(updatedUser);
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        toast.success(result.message || 'Profil mis à jour avec succès', {
+          position: "top-center",
+          style: {
+            background: "#000",
+            color: "#fff",
+          },
+        });
+        return true;
+      } else {
+        toast.error(result.message || 'Erreur lors de la mise à jour', {
+          position: "top-center",
+          style: {
+            background: "#000",
+            color: "#fff",
+          },
+        });
+        console.error('Erreur détaillée:', result);
+        return false;
+      }
+    } catch (error) {
+      toast.error('Erreur de connexion au serveur', {
+        position: "top-center",
+        style: {
+          background: "#000",
+          color: "#fff",
+        },
+      });
+      console.error('Erreur complète:', error);
+      return false;
+    }
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, isLoading, login, register, logout, updateProfile }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};

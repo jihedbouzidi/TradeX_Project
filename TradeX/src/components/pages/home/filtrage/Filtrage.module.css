@@ -1,0 +1,116 @@
+.filterSection {
+  width: 370px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px 7px rgba(0, 0, 0, 0.05);
+}
+
+.filterSection h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2e4576;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #2e4576;
+  padding-bottom: 5px;
+}
+
+.filterSection select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+  background-color: #f8f9fa;
+  color: #333333;
+  font-size: 14px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%232e4576%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+
+.filterSection select:focus {
+  border-color: #2e4576;
+  box-shadow: 0 0 8px rgba(46, 69, 118, 0.3);
+  outline: none;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #333333;
+  cursor: pointer;
+}
+
+.checkboxLabel input {
+  margin-right: 10px;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #2e4576;
+  border-radius: 4px;
+  appearance: none;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.checkboxLabel input:checked {
+  background-color: #2e4576;
+  border-color: #2e4576;
+}
+
+.checkboxLabel input:checked::after {
+  content: "✓";
+  display: block;
+  text-align: center;
+  color: white;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.subOptions {
+  margin-left: 20px;
+  margin-top: 10px;
+  padding-left: 10px;
+  border-left: 2px solid #2e4576;
+}
+
+.subOptions h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2e4576;
+  margin-bottom: 10px;
+}
+
+.searchContainer {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 10px 40px 10px 10px;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+  background-color: #f8f9fa;
+  color: #333333;
+  font-size: 14px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.searchInput:focus {
+  border-color: #2e4576;
+  box-shadow: 0 0 8px rgba(46, 69, 118, 0.3);
+  outline: none;
+}
+
+.searchIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  font-size: 16px;
+}

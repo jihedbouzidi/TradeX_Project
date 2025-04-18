@@ -1,0 +1,422 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+@import url("https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+:root {
+  /* Couleurs primaires (Turquoise) */
+  --primary-100: #e0f7fa; /* Turquoise très clair */
+  --primary-200: #b2ebf2; /* Turquoise clair */
+  --primary-300: #80deea; /* Turquoise moyen */
+  --primary-400: #4dd0e1; /* Turquoise légèrement plus foncé */
+  --primary-500: #26c6da; /* Turquoise profond */
+  --primary-600: #00bcd4; /* Turquoise intense */
+  --primary-700: #00acc1; /* Turquoise foncé */
+  --primary-800: #0097a7; /* Turquoise très foncé */
+  --primary-900: #00838f; /* Turquoise nuit */
+
+  /* Accents (Rose) */
+  --accent-100: #fce4ec; /* Rose très clair */
+  --accent-200: #f8bbd0; /* Rose clair */
+  --accent-300: #f48fb1; /* Rose moyen */
+  --accent-400: #f06292; /* Rose légèrement plus foncé */
+  --accent-500: #ec407a; /* Rose intense */
+  --accent-600: #e91e63; /* Rose profond */
+  --accent-700: #d81b60; /* Rose foncé */
+  --accent-800: #c2185b; /* Rose très foncé */
+  --accent-900: #ad1457; /* Rose nuit */
+
+  /* Couleurs secondaires (Jaune pour équilibrer) */
+  --secondary-100: #fffde7; /* Jaune très clair */
+  --secondary-200: #fff9c4; /* Jaune clair */
+  --secondary-300: #fff59d; /* Jaune moyen */
+  --secondary-400: #fff176; /* Jaune légèrement plus foncé */
+  --secondary-500: #ffee58; /* Jaune intense */
+  --secondary-600: #ffeb3b; /* Jaune profond */
+  --secondary-700: #fdd835; /* Jaune foncé */
+  --secondary-800: #fbc02d; /* Jaune très foncé */
+  --secondary-900: #f9a825; /* Jaune nuit */
+
+  /* Blanc et Noir */
+  --white: #ffffff;
+  --black: #000000;
+
+  /* Ombres élégantes */
+  --shadow-1: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-2: 0 5px 10px rgba(0, 0, 0, 0.1);
+  --shadow-3: 0 10px 20px rgba(0, 0, 0, 0.1);
+  --shadow-4: 0 15px 30px rgba(0, 0, 0, 0.1);
+
+  /* Transition */
+  --transition: 0.3s ease-in-out all;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f0f0; /* Couleur de fond neutre */
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url('votre-image-professionnelle.jpg'); /* Remplacez par votre image */
+  background-size: cover;
+  background-position: center;
+  animation: rotateBackground 20s linear infinite;
+}
+
+@keyframes rotateBackground {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.container {
+  position: relative;
+  width: 850px;
+  height: 550px;
+  background: var(--white);
+  border-radius: 30px;
+  box-shadow: var(--shadow-2);
+  margin: 20px;
+  overflow: hidden;
+  transition: background 0.3s ease;
+}
+
+.btn {
+  width: 100%;
+  height: 48px;
+  background: var(--primary-900);
+  border-radius: 8px;
+  box-shadow: var(--shadow-2);
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--white);
+  font-weight: 600;
+  transition: var(--transition), transform 0.2s;
+}
+
+.btn:hover {
+  background: var(--primary-800);
+  transform: scale(1.05);
+}
+
+.dark-mode {
+  background: var(--grey-900);
+}
+
+.dark-mode .container {
+  background: var(--grey-800);
+}
+
+.dark-mode .btn {
+  background: var(--primary-600);
+  color: var(--white);
+}
+
+.from-box {
+  background: var(--primary-200);
+  position: absolute;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: var(--grey-900);
+  text-align: center;
+  padding: 40px;
+  z-index: 1;
+  transition: 0.6s ease-in-out 1.2s, visibility 0s 1s;
+}
+
+.from-box.login {
+  background: var(--primary-400);
+}
+
+.from-box.register {
+  background: var(--primary-400);
+}
+
+.container.active .from-box {
+  right: 50%;
+}
+
+.from-box.register {
+  visibility: hidden;
+}
+
+.container.active .from-box.register {
+  visibility: visible;
+}
+
+form {
+  width: 100%;
+}
+
+.container h1 {
+  font-size: 36px;
+  margin: -10px 0;
+  color: var(--grey-900);
+}
+
+.input-box {
+  position: relative;
+  margin: 30px 0;
+}
+
+.input-box input {
+  width: 100%;
+  padding: 13px 50px 13px 20px;
+  background: var(--grey-100);
+  border-radius: 8px;
+  border: 2px solid black;
+  outline: none;
+  font-size: 16px;
+  color: var(--grey-900);
+  font-weight: 500;
+  transition: border 0.3s ease;
+}
+
+.input-box input::placeholder {
+  color: var(--grey-500);
+  font-weight: 400;
+}
+
+.input-box input:focus {
+  border: 2px solid var(--primary-500);
+}
+
+.input-box i {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 25px;
+  color: var(--grey-500);
+}
+
+.forgot-link {
+  margin: -15px 0 15px;
+}
+
+.forgot-link a {
+  font-size: 14.5px;
+  color: var(--primary-900);
+  text-decoration: none;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.social-icons a {
+  display: inline-flex;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 8px;
+  font-size: 24px;
+  color: black;
+  text-decoration: none;
+  margin: 0 8px;
+  transition: background 0.3s;
+}
+
+.social-icons a:hover {
+  background: black;
+  color: white;
+}
+
+.toggle-box {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-400);
+}
+
+.toggle-box::before {
+  content: "";
+  background: var(--primary-100);
+  position: absolute;
+  left: -250%;
+  width: 300%;
+  height: 100%;
+  background: url("./public/img1.png") no-repeat center center/cover;
+  border-radius: 150px;
+  z-index: 2;
+  transition: 1.8s ease-in-out;
+}
+
+.container.active .toggle-box::before {
+  left: 50%;
+}
+
+.toggle-panel {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  transition: 0.6s ease-in-out;
+}
+
+.toggle-panel.toggle-left {
+  left: 0;
+  transition-delay: 1.2s;
+}
+
+.container.active .toggle-panel.toggle-left {
+  left: -50%;
+  transition-delay: 0.6s;
+}
+
+.toggle-panel.toggle-right {
+  right: -50%;
+  transition-delay: 0.6s;
+}
+
+.container.active .toggle-panel.toggle-right {
+  right: 0%;
+  transition-delay: 1.2s;
+}
+
+.toggle-panel p {
+  margin-bottom: 20px;
+}
+
+.toggle-panel .btn {
+  width: 160px;
+  height: 46px;
+  background: transparent;
+  border: 2px solid var(--white);
+  box-shadow: none;
+}
+
+.dark-mode {
+  background: var(--grey-900);
+}
+
+.dark-mode .container {
+  background: var(--grey-800);
+}
+
+.dark-mode .from-box {
+  background: var(--grey-700);
+  color: var(--white);
+}
+
+.dark-mode .input-box input {
+  background: var(--grey-600);
+  color: var(--white);
+}
+
+.dark-mode .btn {
+  background: var(--primary-600);
+  color: var(--white);
+}
+
+.dark-mode .social-icons a {
+  color: var(--white);
+}
+
+.password-strength {
+  display: none;
+  font-size: 14px;
+  margin-top: 10px;
+  color: var(--grey-700);
+}
+
+input[type="password"]:focus ~ .password-strength {
+  display: block;
+}
+
+/* Responsive Design pour Mobile */
+@media screen and (max-width: 768px) {
+  body::before {
+    animation: none; /* Désactive l'animation sur mobile */
+  }
+
+  .container {
+    width: 90%;
+    height: auto;
+    margin: 10px;
+    padding: 20px;
+  }
+
+  .from-box {
+    width: 100%;
+    height: auto;
+    padding: 20px;
+  }
+
+  .input-box input {
+    padding: 10px 40px 10px 15px;
+  }
+
+  .btn {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .social-icons a {
+    padding: 8px;
+    font-size: 20px;
+  }
+
+  .toggle-box::before {
+    display: none; /* Cache l'image de fond sur mobile */
+  }
+
+  .toggle-panel {
+    display: none; /* Cache les panneaux de bascule sur mobile */
+  }
+
+  .container h1 {
+    font-size: 24px;
+  }
+
+  .input-box {
+    margin: 20px 0;
+  }
+
+  .forgot-link a {
+    font-size: 12px;
+  }
+
+  .password-strength {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .from-box {
+    padding: 15px;
+  }
+
+  .toggle-panel h1 {
+    font-size: 20px;
+  }
+
+  .toggle-panel p {
+    font-size: 12px;
+  }
+}
