@@ -355,21 +355,21 @@
   min-width: 170px;
   padding: 0 40px;
   height: 56px;
-  
+
   /* Style visuel - Dégradé violet sombre */
   background: linear-gradient(135deg, #7854cc, #6829b5);
   box-shadow: 0 4px 20px rgba(94, 31, 172, 0.3);
   border: 1px solid rgba(156, 39, 176, 0.3);
   border-radius: 50px;
-  
+
   /* Texte */
-  color: #FFFFFF;
-  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: #ffffff;
+  font-family: "Inter", "Segoe UI", sans-serif;
   font-weight: 600;
   font-size: 16px;
   letter-spacing: 0.5px;
   text-transform: none;
-  
+
   /* Effets */
   cursor: pointer;
   position: relative;
@@ -381,7 +381,7 @@
 .aiButton:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 30px rgba(156, 39, 176, 0.4);
-  background: linear-gradient(135deg, #4A148C, #7B1FA2);
+  background: linear-gradient(135deg, #4a148c, #7b1fa2);
   border-color: rgba(186, 104, 200, 0.5);
   text-shadow: 0 0 8px rgba(186, 104, 200, 0.4);
 }
@@ -394,7 +394,7 @@
 
 /* Effet de lueur interne */
 .aiButton::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -411,13 +411,17 @@
 
 /* Effet de vague violet */
 .aiButton::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
   width: 8px;
   height: 8px;
-  background: radial-gradient(circle, rgba(186, 104, 200, 0.8), transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(186, 104, 200, 0.8),
+    transparent 70%
+  );
   opacity: 0;
   border-radius: 100%;
   transform: scale(1, 1) translate(-50%);
@@ -453,9 +457,18 @@
 }
 
 @keyframes pulse {
-  0% { opacity: 0.8; transform: rotate(10deg) scale(1.1); }
-  50% { opacity: 1; transform: rotate(10deg) scale(1.15); }
-  100% { opacity: 0.8; transform: rotate(10deg) scale(1.1); }
+  0% {
+    opacity: 0.8;
+    transform: rotate(10deg) scale(1.1);
+  }
+  50% {
+    opacity: 1;
+    transform: rotate(10deg) scale(1.15);
+  }
+  100% {
+    opacity: 0.8;
+    transform: rotate(10deg) scale(1.1);
+  }
 }
 
 /* Animation du texte */
@@ -488,11 +501,11 @@
 /* Variante pour thèmes dark */
 @media (prefers-color-scheme: dark) {
   .aiButton {
-    background: hsl(from color h s l)linear-gradient(135deg, #7854cc, #6829b5);
+    background: hsl(from color h s l) linear-gradient(135deg, #7854cc, #6829b5);
     box-shadow: 0 4px 20px rgba(46, 27, 91, 0.4);
   }
   .aiButton:hover {
-    background: linear-gradient(135deg, #2E1B5B, #4A148C);
+    background: linear-gradient(135deg, #2e1b5b, #4a148c);
     box-shadow: 0 8px 35px rgba(156, 39, 176, 0.6);
   }
 }
