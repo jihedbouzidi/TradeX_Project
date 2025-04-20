@@ -1,3 +1,4 @@
+
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
 import { AuthContext } from './AuthContext';
@@ -127,16 +128,21 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await fetch('http://localhost/Backend_TradeX/modifierPro.php', {
         method: 'POST',
-        body: formData // Pas de Content-Type pour FormData, le navigateur le gère
+        body: formData, // Pas besoin de Content-Type pour FormData
+        // Retirez 'credentials: 'include'' sauf si vous gérez les cookies
       });
-
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
       const result = await response.json();
-
+  
       if (result.status === 'success') {
         const updatedUser = { ...user, ...result.user };
         setUser(updatedUser);
         localStorage.setItem('user', JSON.stringify(updatedUser));
-        toast.success(result.message || 'Profil mis à jour avec succès', {
+        toast.success(result.message || 'Profil mis à jour!', {
           position: "top-center",
           style: {
             background: "#000",
@@ -145,25 +151,17 @@ export const AuthProvider = ({ children }) => {
         });
         return true;
       } else {
-        toast.error(result.message || 'Erreur lors de la mise à jour', {
-          position: "top-center",
-          style: {
-            background: "#000",
-            color: "#fff",
-          },
-        });
-        console.error('Erreur détaillée:', result);
-        return false;
+        throw new Error(result.message || 'Erreur de mise à jour');
       }
     } catch (error) {
-      toast.error('Erreur de connexion au serveur', {
+      toast.error(error.message || 'Erreur technique', {
         position: "top-center",
         style: {
           background: "#000",
           color: "#fff",
         },
       });
-      console.error('Erreur complète:', error);
+      console.error('Erreur détaillée:', error);
       return false;
     }
   };

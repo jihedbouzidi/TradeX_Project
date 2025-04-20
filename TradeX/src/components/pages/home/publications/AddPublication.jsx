@@ -14,7 +14,6 @@ const AddPublication = ({ onPublish }) => {
 
   const handleAddPublicationClick = () => {
     setShowModal(true);
-    
   };
 
   const handleCloseModal = () => {
@@ -42,6 +41,9 @@ const AddPublication = ({ onPublish }) => {
   const onPanier = () => {
     navigate("/panier");
   };
+  const onChatWithAI = () => {
+    navigate("/chat");
+  };
 
   return (
     <div className={styles.addPublication}>
@@ -54,6 +56,10 @@ const AddPublication = ({ onPublish }) => {
           onClick={handleAddPublicationClick}
         >
           <FaPlus /> Ajouter une Publication
+        </button>
+        <button className={styles.aiButton} onClick={onChatWithAI}>
+          <span className={styles.aiIcon}>🤖</span>
+          <span>Chat With AI</span>
         </button>
       </div>
 

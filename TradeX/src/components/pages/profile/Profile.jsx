@@ -131,45 +131,50 @@ export const Profile = () => {
       setIsEditing(false);
       return;
     }
-
+  
     if (!validateProfileData()) return;
     if (!validatePassword()) return;
-
+  
     setIsSaving(true);
-
-    const formData = new FormData();
-    formData.append("utilisateur_id", user.id);
-    formData.append("nomPre", profileData.NomPre);
-    formData.append("email", profileData.Email);
-    formData.append("telephone", profileData.Telephone);
-    formData.append("localisation", profileData.location);
-    formData.append("specialite", profileData.specialite);
-    formData.append("facebook", profileData.socialMedia.facebook);
-    formData.append("whatsapp", profileData.socialMedia.whatsapp);
-    formData.append("instagram", profileData.socialMedia.insta);
-
-    if (passwordData.oldPassword && passwordData.newPassword) {
-      formData.append("old_password", passwordData.oldPassword);
-      formData.append("new_password", passwordData.newPassword);
-    }
-
-    if (profileData.photoFile) {
-      formData.append("photo_profil", profileData.photoFile);
-    }
-
+  
     try {
+      const formData = new FormData();
+      // Ajoutez tous les champs nécessaires
+      Object.keys(profileData).forEach(key => {
+        if (key !== 'socialMedia' && key !== 'photoURL' && key !== 'photoFile') {
+          formData.append(key, profileData[key]);
+        }
+      });
+  
+      // Ajoutez les médias sociaux
+      Object.keys(profileData.socialMedia).forEach(platform => {
+        formData.append(platform, profileData.socialMedia[platform]);
+      });
+  
+      // Ajoutez le fichier photo si présent
+      if (profileData.photoFile) {
+        formData.append('photo_profil', profileData.photoFile);
+      }
+  
+      // Ajoutez les mots de passe si modifiés
+      if (passwordData.newPassword) {
+        formData.append('old_password', passwordData.oldPassword);
+        formData.append('new_password', passwordData.newPassword);
+      }
+  
       const success = await updateProfile(formData);
-
       if (success) {
         setPasswordData({
           oldPassword: "",
           newPassword: "",
           confirmPassword: "",
         });
+        setIsEditing(false);
       }
+    } catch (error) {
+      console.error("Erreur lors de la sauvegarde:", error);
     } finally {
       setIsSaving(false);
-      setIsEditing(false);
     }
   };
 
@@ -193,6 +198,12 @@ export const Profile = () => {
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Vérifiez que c'est bien une image
+      if (!file.type.match('image.*')) {
+        toast.error('Veuillez sélectionner une image valide');
+        return;
+      }
+      
       // Prévisualisation instantanée
       const reader = new FileReader();
       reader.onload = (event) => {
