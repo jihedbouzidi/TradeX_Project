@@ -3,10 +3,11 @@ import { useState, useEffect } from "react";
 import styles from "./AddPublication.module.css";
 import { FaUpload, FaFacebook, FaWhatsapp } from "react-icons/fa";
 import CharacteristicsForm from "./CharacteristicsForm";
+import { useAuth } from "../../../../hooks/useAuth";
+import { toast } from "react-hot-toast";
 
 const Modal = ({
   onClose,
-  onPublish,
   description,
   setDescription,
   images,
@@ -19,11 +20,14 @@ const Modal = ({
   const [showCharacteristics, setShowCharacteristics] = useState(false);
   const [selectedCharacteristics, setSelectedCharacteristics] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
+  const { user, AddPulication } = useAuth();
 
   const handleImageChange = (event) => {
     const files = event.target.files;
     if (files) {
-      const imagesArray = Array.from(files).map((file) => URL.createObjectURL(file));
+      const imagesArray = Array.from(files).map((file) =>
+        URL.createObjectURL(file)
+      );
       setImages((prevImages) => [...prevImages, ...imagesArray]);
     }
   };
@@ -36,15 +40,85 @@ const Modal = ({
   useEffect(() => {
     if (showCharacteristics && selectedCharacteristics) {
       const deviceType = selectedOption === "PC" ? "PC" : "Mobile";
-      setDescription(`Type d'appareil : ${deviceType}\n${selectedCharacteristics}`);
+      setDescription(
+        `Type d'appareil : ${deviceType}\n${selectedCharacteristics}`
+      );
     }
-  }, [selectedCharacteristics, showCharacteristics, setDescription, selectedOption]);
+  }, [
+    selectedCharacteristics,
+    showCharacteristics,
+    setDescription,
+    selectedOption,
+  ]);
 
-  const handlePublishWithCharacteristics = () => {
-    if (showCharacteristics && selectedCharacteristics) {
-      setDescription(`Type d'appareil : ${selectedOption === "PC" ? "PC" : "Mobile"}\n${selectedCharacteristics}`);
+  const handlePublishWithCharacteristics = async () => {
+    try {
+      if (!user) {
+        toast.error("Veuillez vous connecter pour publier", {
+          position: "top-center",
+          style: {
+            background: "#000",
+            color: "#fff",
+          },
+        });
+        return;
+      }
+
+      if (!description.trim()) {
+        toast.error("Veuillez ajouter une description", {
+          position: "top-center",
+          style: {
+            background: "#000",
+            color: "#fff",
+          },
+        });
+        return;
+      }
+
+      // Préparer la description finale
+      let finalDescription = description;
+      if (showCharacteristics && selectedCharacteristics) {
+        const deviceType = selectedOption === "PC" ? "PC" : "Mobile";
+        finalDescription = `Type d'appareil : ${deviceType}\n${selectedCharacteristics}\n\n${description}`;
+      }
+
+      // Envoyer les données au backend
+      await AddPulication(
+        user.id,
+        "default",
+        "Publication",
+        finalDescription,
+        facebookLink,
+        whatsappLink
+      );
+
+      toast.success("Publication ajoutée avec succès!", {
+        position: "top-center",
+        style: {
+          background: "#000",
+          color: "#fff",
+        },
+      });
+
+      // Réinitialiser le formulaire
+      setDescription("");
+      setImages([]);
+      setFacebookLink("");
+      setWhatsappLink("");
+      setSelectedCharacteristics("");
+      setSelectedOption("");
+      setShowCharacteristics(false);
+      onClose();
+    } catch (error) {
+      toast.error(error.message || "Erreur lors de la publication", {
+        position: "top-center",
+        style: {
+          background: "#000",
+          color: "#fff",
+        },
+      });
+      console.error(error);
     }
-    onPublish();
   };
 
   return (
@@ -76,8 +150,15 @@ const Modal = ({
           <div className={styles.imagePreviewContainer}>
             {images.map((image, index) => (
               <div key={index} className={styles.imagePreview}>
-                <img src={image} alt={`Selected ${index}`} className={styles.previewImage} />
-                <button onClick={() => removeImage(index)} className={styles.removeImageButton}>
+                <img
+                  src={image}
+                  alt={`Selected ${index}`}
+                  className={styles.previewImage}
+                />
+                <button
+                  onClick={() => removeImage(index)}
+                  className={styles.removeImageButton}
+                >
                   ×
                 </button>
               </div>
@@ -131,7 +212,10 @@ const Modal = ({
           <button onClick={onClose} className={styles.cancelButton}>
             Annuler
           </button>
-          <button onClick={handlePublishWithCharacteristics} className={styles.publishButton}>
+          <button
+            onClick={handlePublishWithCharacteristics}
+            className={styles.publishButton}
+          >
             Publier
           </button>
         </div>
