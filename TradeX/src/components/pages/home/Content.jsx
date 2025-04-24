@@ -2,7 +2,7 @@
 import styles from "./Home.module.css";
 import { FaWhatsapp, FaFacebook, FaShoppingCart } from "react-icons/fa"; 
 
-const Content = ({ user, description, image }) => {
+const Content = ({ user, description, images, date_pub, facebook, whatsapp }) => {
   return (
     <div className={styles.content}>
       <div className={styles.headerSection}>
@@ -12,12 +12,14 @@ const Content = ({ user, description, image }) => {
               src={user.photoProURL}
               className={styles.profilePhoto}
               alt="Photo de Profile"
-              style={{ borderRadius: "50%", border: "1px solid black" }}
             />
           </a>
           <a href={user.LinkProfile} className={styles.profileLink}>
             <strong className={styles.nom}>{user.nom}</strong>
           </a>
+          <br />
+          <br />
+          <i>{new Date(date_pub).toLocaleString()}</i>
         </div>
         <button className={styles.addToCartButton}>
           <FaShoppingCart className={styles.cartIcon} />
@@ -26,29 +28,46 @@ const Content = ({ user, description, image }) => {
       </div>
 
       <p className={styles.description}>{description}</p>
-      <img src={image} className={styles.publicationImage} alt="Publication" />
+      
+      {images && images.length > 0 && (
+        <div className={styles.imagesContainer}>
+          {images.map((image, index) => (
+            <img
+              key={index}
+              src={image}
+              className={styles.publicationImage}
+              alt={`Publication ${index + 1}`}
+              loading="lazy"
+            />
+          ))}
+        </div>
+      )}
 
       <div className={styles.interestedSection}>
         <h3 style={{ color: "#243c5e" }}>Contact</h3>
         <div className={styles.socialButtons}>
-          <a
-            href="https://wa.me/1234567890"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.whatsappButton}
-          >
-            <FaWhatsapp className={styles.icon} />
-            WhatsApp
-          </a>
-          <a
-            href="https://www.facebook.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.facebookButton}
-          >
-            <FaFacebook className={styles.icon} />
-            Facebook
-          </a>
+          {whatsapp && (
+            <a
+              href={whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.whatsappButton}
+            >
+              <FaWhatsapp className={styles.icon} />
+              WhatsApp
+            </a>
+          )}
+          {facebook && (
+            <a
+              href={facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.facebookButton}
+            >
+              <FaFacebook className={styles.icon} />
+              Facebook
+            </a>
+          )}
         </div>
       </div>
     </div>

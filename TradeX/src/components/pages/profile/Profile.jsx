@@ -8,6 +8,7 @@ import { SocialMedia } from "./SocialMedia";
 import { ProfileActions } from "./ProfileActions";
 import { FaNewspaper } from "react-icons/fa";
 import { useAuth } from "../../../hooks/useAuth";
+
 export const Profile = () => {
   const navigate = useNavigate();
   const { user, updateProfile, logout } = useAuth();
@@ -17,6 +18,7 @@ export const Profile = () => {
       navigate("/");
     }
   };
+
   const [profileData, setProfileData] = useState({
     NomPre: "",
     Email: "",
@@ -52,8 +54,7 @@ export const Profile = () => {
           whatsapp: user.whatsapp || "",
           insta: user.instagram || "",
         },
-        photoURL: user.chemin_photo
-        
+        photoURL: user.chemin_photo,
       });
     }
   }, [user]);
@@ -126,53 +127,62 @@ export const Profile = () => {
     return true;
   };
 
-  const handleSaveClick = async () => {
+  const handleSaveClick = async (e) => {
+    e.preventDefault();
+
     if (!isEditing) {
       setIsEditing(false);
       return;
     }
-  
+
     if (!validateProfileData()) return;
     if (!validatePassword()) return;
-  
+
+    
+
     setIsSaving(true);
-  
+
     try {
       const formData = new FormData();
-      // Ajoutez tous les champs nécessaires
-      Object.keys(profileData).forEach(key => {
-        if (key !== 'socialMedia' && key !== 'photoURL' && key !== 'photoFile') {
-          formData.append(key, profileData[key]);
-        }
-      });
-  
-      // Ajoutez les médias sociaux
-      Object.keys(profileData.socialMedia).forEach(platform => {
-        formData.append(platform, profileData.socialMedia[platform]);
-      });
-  
-      // Ajoutez le fichier photo si présent
+
+      formData.append("utilisateur_id", user.id);
+      formData.append("nomPre", profileData.NomPre);
+      formData.append("email", profileData.Email);
+      formData.append("telephone", profileData.Telephone);
+      formData.append("localisation", profileData.location || "");
+      formData.append("specialite", profileData.specialite || "");
+      formData.append("facebook", profileData.socialMedia.facebook || "");
+      formData.append("whatsapp", profileData.socialMedia.whatsapp || "");
+      formData.append("instagram", profileData.socialMedia.insta || "");
+
+      if (passwordData.oldPassword && passwordData.newPassword) {
+        formData.append("old_password", passwordData.oldPassword);
+        formData.append("new_password", passwordData.newPassword);
+      }
+
       if (profileData.photoFile) {
-        formData.append('photo_profil', profileData.photoFile);
+        formData.append("photo_profil", profileData.photoFile);
       }
-  
-      // Ajoutez les mots de passe si modifiés
-      if (passwordData.newPassword) {
-        formData.append('old_password', passwordData.oldPassword);
-        formData.append('new_password', passwordData.newPassword);
-      }
-  
+
       const success = await updateProfile(formData);
+
       if (success) {
+        setIsEditing(false);
         setPasswordData({
           oldPassword: "",
           newPassword: "",
           confirmPassword: "",
         });
-        setIsEditing(false);
       }
     } catch (error) {
       console.error("Erreur lors de la sauvegarde:", error);
+      toast.error("Erreur lors de la mise à jour du profil", {
+        position: "top-center",
+        style: {
+          background: "#000",
+          color: "#fff",
+        },
+      });
     } finally {
       setIsSaving(false);
     }
@@ -198,19 +208,17 @@ export const Profile = () => {
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Vérifiez que c'est bien une image
-      if (!file.type.match('image.*')) {
-        toast.error('Veuillez sélectionner une image valide');
+      if (!file.type.match("image.*")) {
+        toast.error("Veuillez sélectionner une image valide");
         return;
       }
-      
-      // Prévisualisation instantanée
+
       const reader = new FileReader();
       reader.onload = (event) => {
-        setProfileData(prev => ({
+        setProfileData((prev) => ({
           ...prev,
           photoURL: event.target.result,
-          photoFile: file
+          photoFile: file,
         }));
       };
       reader.readAsDataURL(file);
@@ -219,6 +227,30 @@ export const Profile = () => {
 
   const handlePublicationsClick = () => {
     navigate("/votrePub");
+  };
+
+  const handleCancel = () => {
+    if (user) {
+      setProfileData({
+        NomPre: user.nomPre || "",
+        Email: user.email || "",
+        Telephone: user.telephone || "",
+        location: user.localisation || "",
+        specialite: user.specialite || "",
+        socialMedia: {
+          facebook: user.facebook || "",
+          whatsapp: user.whatsapp || "",
+          insta: user.instagram || "",
+        },
+        photoURL: user.chemin_photo,
+      });
+    }
+    setPasswordData({
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    });
+    setIsEditing(false);
   };
 
   if (!user) {
@@ -254,7 +286,7 @@ export const Profile = () => {
           <h1 className={styles.profile_title}>Profil</h1>
           <h3 className={styles.user_name}>{profileData.NomPre}</h3>
           <ProfileInfo
-            users={profileData}
+            user={profileData}
             isEditing={isEditing}
             handleInputChange={handleInputChange}
             passwordData={passwordData}
@@ -276,6 +308,7 @@ export const Profile = () => {
           onEditClick={() => setIsEditing(true)}
           onSaveClick={handleSaveClick}
           onLogout={handleLogout}
+          onCancel={handleCancel}
         />
       )}
     </div>

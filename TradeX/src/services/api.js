@@ -1,8 +1,17 @@
 export const api = {
-  baseUrl: "http://localhost/Backend_TradeX",
+  baseUrl: "http://localhost/Backend_TradeX", // Retirer le port 80 car c'est le port par défaut
 
-  async request(endpoint, method = "GET", data = null) {
-    const url = `${this.baseUrl}${endpoint}`;
+  async request(endpoint, method = "GET", data = null, params = null) {
+    const url = new URL(`${this.baseUrl}${endpoint}`);
+    
+    if (params) {
+      Object.keys(params).forEach(key => {
+        if (params[key] !== undefined && params[key] !== null) {
+          url.searchParams.append(key, params[key]);
+        }
+      });
+    }
+
     const options = {
       method,
       headers: {
@@ -10,28 +19,27 @@ export const api = {
       },
     };
 
-    if (data) {
+    if (data && (method === "POST" || method === "PUT")) {
       options.body = JSON.stringify(data);
     }
 
     try {
       const response = await fetch(url, options);
-      const text = await response.text();
-
-      // Try to parse JSON, fallback to text if it fails
-      try {
-        return JSON.parse(text);
-      } catch {
-        return text;
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.message || `HTTP error! status: ${response.status}`);
       }
+
+      return await response.json();
     } catch (error) {
       console.error("API request failed:", error);
       throw error;
     }
   },
 
-  async get(endpoint) {
-    return this.request(endpoint);
+  async get(endpoint, params = null) {
+    return this.request(endpoint, "GET", null, params);
   },
 
   async post(endpoint, data) {

@@ -135,19 +135,18 @@ export const AuthProvider = ({ children }) => {
         "http://localhost/Backend_TradeX/modifierPro.php",
         {
           method: "POST",
-          body: formData, // Pas besoin de Content-Type pour FormData
-          // Retirez 'credentials: 'include'' sauf si vous gérez les cookies
+          body: formData, // FormData est envoyé directement sans en-tête Content-Type
         }
       );
-
+  
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+  
       const result = await response.json();
-
-      if (result.status === "success") {
-        const updatedUser = { ...user, ...result.user };
+  
+      if (result.status === "success" || result.message === 'Profil mis à jour avec succès') {
+        const updatedUser = { ...user, ...result.data }; // Adapté au format du backend
         setUser(updatedUser);
         localStorage.setItem("user", JSON.stringify(updatedUser));
         toast.success(result.message || "Profil mis à jour!", {
@@ -174,13 +173,16 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  
+  
+
   const AddPulication = async (
     idUser,
-    type,
-    titre,
+    type_app,
     desc,
     facebook,
-    whatsapp
+    whatsapp,
+    images = []
   ) => {
     try {
       const response = await fetch(
@@ -190,17 +192,17 @@ export const AuthProvider = ({ children }) => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             utilisateur_id: idUser,
-            type: type,
-            titre: titre,
+            type: type_app,
             description: desc,
             facebookLink: facebook,
             whatsappLink: whatsapp,
+            images: images
           }),
         }
       );
-
+  
       const result = await response.json();
-
+  
       if (result.status === "success") {
         toast.success("Publication ajoutée avec succès!", {
           position: "top-center",
@@ -226,6 +228,8 @@ export const AuthProvider = ({ children }) => {
       throw error;
     }
   };
+
+
 
   return (
     <AuthContext.Provider

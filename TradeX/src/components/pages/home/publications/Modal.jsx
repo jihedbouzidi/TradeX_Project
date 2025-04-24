@@ -1,69 +1,35 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
 import styles from "./AddPublication.module.css";
-import { FaUpload, FaFacebook, FaWhatsapp } from "react-icons/fa";
-import CharacteristicsForm from "./CharacteristicsForm";
-import { useAuth } from "../../../../hooks/useAuth";
+import { FaUpload, FaFacebook, FaWhatsapp, FaTimes } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 
 const Modal = ({
   onClose,
+  onPublish,
+  type_app,
+  setType_app,
   description,
   setDescription,
   images,
   setImages,
   facebookLink,
   setFacebookLink,
-  whatsappLink,
-  setWhatsappLink,
+  whatsappNumber,
+  setWhatsappNumber,
 }) => {
-  const [showCharacteristics, setShowCharacteristics] = useState(false);
-  const [selectedCharacteristics, setSelectedCharacteristics] = useState("");
-  const [selectedOption, setSelectedOption] = useState("");
-  const { user, AddPulication } = useAuth();
-
-  const handleImageChange = (event) => {
-    const files = event.target.files;
-    if (files) {
-      const imagesArray = Array.from(files).map((file) =>
-        URL.createObjectURL(file)
-      );
-      setImages((prevImages) => [...prevImages, ...imagesArray]);
-    }
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files).slice(0, 4 - images.length);
+    setImages([...images, ...files]);
   };
 
   const removeImage = (index) => {
-    const newImages = images.filter((_, i) => i !== index);
+    const newImages = [...images];
+    newImages.splice(index, 1);
     setImages(newImages);
   };
 
-  useEffect(() => {
-    if (showCharacteristics && selectedCharacteristics) {
-      const deviceType = selectedOption === "PC" ? "PC" : "Mobile";
-      setDescription(
-        `Type d'appareil : ${deviceType}\n${selectedCharacteristics}`
-      );
-    }
-  }, [
-    selectedCharacteristics,
-    showCharacteristics,
-    setDescription,
-    selectedOption,
-  ]);
-
   const handlePublishWithCharacteristics = async () => {
     try {
-      if (!user) {
-        toast.error("Veuillez vous connecter pour publier", {
-          position: "top-center",
-          style: {
-            background: "#000",
-            color: "#fff",
-          },
-        });
-        return;
-      }
-
       if (!description.trim()) {
         toast.error("Veuillez ajouter une description", {
           position: "top-center",
@@ -75,22 +41,7 @@ const Modal = ({
         return;
       }
 
-      // Préparer la description finale
-      let finalDescription = description;
-      if (showCharacteristics && selectedCharacteristics) {
-        const deviceType = selectedOption === "PC" ? "PC" : "Mobile";
-        finalDescription = `Type d'appareil : ${deviceType}\n${selectedCharacteristics}\n\n${description}`;
-      }
-
-      // Envoyer les données au backend
-      await AddPulication(
-        user.id,
-        "default",
-        "Publication",
-        finalDescription,
-        facebookLink,
-        whatsappLink
-      );
+      await onPublish();
 
       toast.success("Publication ajoutée avec succès!", {
         position: "top-center",
@@ -99,16 +50,6 @@ const Modal = ({
           color: "#fff",
         },
       });
-
-      // Réinitialiser le formulaire
-      setDescription("");
-      setImages([]);
-      setFacebookLink("");
-      setWhatsappLink("");
-      setSelectedCharacteristics("");
-      setSelectedOption("");
-      setShowCharacteristics(false);
-      onClose();
     } catch (error) {
       toast.error(error.message || "Erreur lors de la publication", {
         position: "top-center",
@@ -124,100 +65,107 @@ const Modal = ({
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
-        <h2>Ajouter une Publication</h2>
-        <textarea
-          placeholder="Description de la publication"
-          className={styles.modalTextarea}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          style={{ height: "150px" }}
-          required
-        />
-        <label className={styles.fileUpload}>
-          <FaUpload className={styles.uploadIcon} />
-          <span>Choisir des images</span>
-          <input
-            type="file"
-            accept="image/*"
-            className={styles.hiddenFileInput}
-            onChange={handleImageChange}
-            multiple
-          />
-        </label>
-        <br />
+        <div className={styles.modalContent}>
+          <div className={styles.modalHeader}>
+            <h2 className={styles.modalTitle}>Nouvelle Publication</h2>
+            <button className={styles.modalClose} onClick={onClose}>
+              <FaTimes />
+            </button>
+          </div>
 
-        {images.length > 0 && (
-          <div className={styles.imagePreviewContainer}>
-            {images.map((image, index) => (
-              <div key={index} className={styles.imagePreview}>
-                <img
-                  src={image}
-                  alt={`Selected ${index}`}
-                  className={styles.previewImage}
+          <div className={styles.modalBody}>
+            <textarea
+              className={styles.modalDesc}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Décrivez votre publication..."
+              rows={5}
+            />
+            <select
+              value={type_app}
+              onChange={(e) => setType_app(e.target.value)}
+              name="SelectTypeAppareil"
+              className={styles.select}
+            >
+              <option value="toutes">Toutes</option>
+              <option value="pc">Pc</option>
+              <option value="mobile">Mobile</option>
+            </select>
+
+            <div className={styles.fileUploadContainer}>
+              <label className={styles.fileUpload}>
+                <FaUpload className={styles.uploadIcon} />
+                <span>Ajouter des images</span>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className={styles.hiddenFileInput}
                 />
-                <button
-                  onClick={() => removeImage(index)}
-                  className={styles.removeImageButton}
-                >
-                  ×
-                </button>
+              </label>
+              <p className={styles.fileUploadHint}>(Maximum 4 images)</p>
+            </div>
+
+            {images.length > 0 && (
+              <div className={styles.imageGrid}>
+                {images.map((image, index) => (
+                  <div key={index} className={styles.imageGridItem}>
+                    <img
+                      src={
+                        image instanceof File
+                          ? URL.createObjectURL(image)
+                          : image
+                      }
+                      alt={`Preview ${index + 1}`}
+                      className={styles.previewImage}
+                    />
+                    <button
+                      className={styles.removeImageButton}
+                      onClick={() => removeImage(index)}
+                    >
+                      <FaTimes />
+                    </button>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        )}
+            )}
 
-        <div className={styles.socialLinks}>
-          <div className={styles.socialLinkInput}>
-            <FaFacebook className={styles.socialIcon} />
-            <input
-              type="text"
-              placeholder="Lien Facebook"
-              value={facebookLink}
-              onChange={(e) => setFacebookLink(e.target.value)}
-              className={styles.socialInput}
-              required
-            />
+            <div className={styles.socialLinks}>
+              <div className={styles.socialLinkInput}>
+                <FaFacebook className={styles.socialIcon} />
+                <input
+                  type="text"
+                  value={facebookLink}
+                  onChange={(e) => setFacebookLink(e.target.value)}
+                  placeholder="Lien Facebook"
+                  className={styles.socialInput}
+                />
+              </div>
+              <div className={styles.socialLinkInput}>
+                <FaWhatsapp className={styles.socialIcon} />
+                <input
+                  type="text"
+                  value={whatsappNumber}
+                  onChange={(e) => setWhatsappNumber(e.target.value)}
+                  placeholder="Numéro WhatsApp"
+                  className={styles.socialInput}
+                />
+              </div>
+            </div>
           </div>
-          <div className={styles.socialLinkInput}>
-            <FaWhatsapp className={styles.socialIcon} />
-            <input
-              type="text"
-              placeholder="Lien WhatsApp"
-              value={whatsappLink}
-              onChange={(e) => setWhatsappLink(e.target.value)}
-              className={styles.socialInput}
-              required
-            />
+
+          <div className={styles.modalFooter}>
+            <button className={styles.cancelButton} onClick={onClose}>
+              Annuler
+            </button>
+            <button
+              className={styles.publishButton}
+              onClick={handlePublishWithCharacteristics}
+            >
+              Publier
+            </button>
           </div>
-        </div>
-        <br />
-        <label className={styles.switch}>
-          <input
-            type="checkbox"
-            checked={showCharacteristics}
-            onChange={() => setShowCharacteristics(!showCharacteristics)}
-          />
-          <span className={styles.slider}></span>
-          Ajouter des Caractéristiques
-        </label>
-
-        {showCharacteristics && (
-          <CharacteristicsForm
-            setSelectedCharacteristics={setSelectedCharacteristics}
-            setSelectedOption={setSelectedOption}
-          />
-        )}
-
-        <div className={styles.modalButtons}>
-          <button onClick={onClose} className={styles.cancelButton}>
-            Annuler
-          </button>
-          <button
-            onClick={handlePublishWithCharacteristics}
-            className={styles.publishButton}
-          >
-            Publier
-          </button>
         </div>
       </div>
     </div>

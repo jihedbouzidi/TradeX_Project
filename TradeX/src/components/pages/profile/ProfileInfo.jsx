@@ -3,7 +3,7 @@ import styles from "./Profile.module.css";
 import { useState } from "react";
 
 export const ProfileInfo = ({
-  users = {},
+  user = {},
   isEditing,
   handleInputChange,
   passwordData = {},
@@ -23,8 +23,7 @@ export const ProfileInfo = ({
     setShowPasswordFields(!showPasswordFields);
   };
 
-  // Si users est vide, afficher un message de chargement
-  if (!users || Object.keys(users).length === 0) {
+  if (!user || Object.keys(user).length === 0) {
     return (
       <div className={styles.profile_details}>
         <p>Chargement des informations...</p>
@@ -32,20 +31,27 @@ export const ProfileInfo = ({
     );
   }
 
+  // Filter out non-serializable properties
+  const displayableUser = {
+    ...user,
+    socialMedia: user.socialMedia || {},
+  };
+  delete displayableUser.photoFile; // Remove the File object
+
   const renderEditingForm = () => (
     <form>
       <div className={styles.form_group}>
         <label>Nom Complet</label>
         <input
           type="text"
-          value={users?.NomPre || ""}
+          value={user?.NomPre || ""}
           onChange={(e) => handleInputChange(e, "NomPre")}
           className={styles.form_input}
           required
         />
       </div>
 
-      {Object.entries(users || {}).map(([key, value]) => {
+      {Object.entries(displayableUser).map(([key, value]) => {
         if (
           key === "photoURL" ||
           key === "socialMedia" ||
@@ -122,7 +128,7 @@ export const ProfileInfo = ({
         <label>Facebook</label>
         <input
           type="url"
-          value={users?.socialMedia?.facebook || ""}
+          value={user?.socialMedia?.facebook || ""}
           onChange={(e) => handleSocialMediaChange(e, "facebook")}
           className={styles.form_input}
         />
@@ -132,7 +138,7 @@ export const ProfileInfo = ({
         <label>WhatsApp</label>
         <input
           type="url"
-          value={users?.socialMedia?.whatsapp || ""}
+          value={user?.socialMedia?.whatsapp || ""}
           onChange={(e) => handleSocialMediaChange(e, "whatsapp")}
           className={styles.form_input}
         />
@@ -141,7 +147,7 @@ export const ProfileInfo = ({
         <label>Instagram</label>
         <input
           type="url"
-          value={users?.socialMedia?.insta || ""}
+          value={user?.socialMedia?.insta || ""}
           onChange={(e) => handleSocialMediaChange(e, "insta")}
           className={styles.form_input}
         />
@@ -155,11 +161,11 @@ export const ProfileInfo = ({
         <tr>
           <td className={styles.info_label}>Nom Complet</td>
           <td className={styles.info_value}>
-            : {users?.NomPre || "Non spécifié"}
+            : {user?.NomPre || "Non spécifié"}
           </td>
         </tr>
 
-        {Object.entries(users || {}).map(([key, value]) => {
+        {Object.entries(displayableUser).map(([key, value]) => {
           if (
             key === "photoURL" ||
             key === "socialMedia" ||

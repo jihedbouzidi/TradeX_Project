@@ -104,6 +104,7 @@ button:hover {
   background-color: #0056b3;
 }
 
+
 @media (max-width: 1024px) {
   .accountPage {
     width: 90%;
@@ -210,17 +211,61 @@ button:hover {
   line-height: 1.5;
 }
 
-.publicationImage {
-  height: 400px;
-  width: 400px;
-  border-radius: 10px;
+.imagesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
   margin-bottom: 15px;
+}
+
+/* Style pour 1 image */
+.publicationImage {
+  border-radius: 10px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  object-fit: cover;
 }
 
 .publicationImage:hover {
   transform: scale(1.02);
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Style spécifique selon le nombre d'images */
+.imagesContainer img:nth-child(1):nth-last-child(1) {
+  /* 1 seule image */
+  height: 400px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.imagesContainer img:nth-child(1):nth-last-child(2),
+.imagesContainer img:nth-child(2):nth-last-child(1) {
+  /* 2 images */
+  height: 300px;
+  width: calc(50% - 5px);
+}
+
+.imagesContainer img:nth-child(1):nth-last-child(3),
+.imagesContainer img:nth-child(2):nth-last-child(2),
+.imagesContainer img:nth-child(3):nth-last-child(1) {
+  /* 3 images */
+  height: 200px;
+  width: calc(50% - 5px);
+}
+
+.imagesContainer img:nth-child(3):nth-last-child(1) {
+  /* 3ème image dans une publication de 3 images */
+  width: 100%;
+}
+
+.imagesContainer img:nth-child(1):nth-last-child(4),
+.imagesContainer img:nth-child(2):nth-last-child(3),
+.imagesContainer img:nth-child(3):nth-last-child(2),
+.imagesContainer img:nth-child(4):nth-last-child(1) {
+  /* 4 images */
+  height: 200px;
+  width: calc(50% - 5px);
 }
 
 .interestedSection {
@@ -229,6 +274,7 @@ button:hover {
   border-top: 1px solid #e9ecef;
   text-align: center;
 }
+
 
 .interestedSection h3 {
   font-size: 18px;

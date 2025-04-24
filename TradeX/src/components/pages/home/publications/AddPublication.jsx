@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import styles from "./AddPublication.module.css";
 import { FaShoppingCart, FaPlus } from "react-icons/fa";
@@ -10,9 +9,10 @@ import { toast } from "react-hot-toast";
 const AddPublication = () => {
   const [showModal, setShowModal] = useState(false);
   const [description, setDescription] = useState("");
+  const [type_app, setType_app] = useState("");
   const [images, setImages] = useState([]);
   const [facebookLink, setFacebookLink] = useState("");
-  const [whatsappLink, setWhatsappLink] = useState("");
+  const [whatsappNumber, setWhatsappNumber] = useState("");
   const { user, AddPulication } = useAuth();
   const navigate = useNavigate();
 
@@ -40,23 +40,32 @@ const AddPublication = () => {
         throw new Error("Utilisateur non connecté");
       }
 
+      const whatsappLink = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "";
+
+      // Extraire les noms des fichiers avec leurs extensions
+      const imagePaths = images.map(image => {
+        if (image instanceof File) {
+          return image.name; // Retourne le nom du fichier avec extension
+        }
+        // Si c'est déjà un chemin, retourne seulement le nom du fichier
+        return image.split('/').pop();
+      });
+
       await AddPulication(
         user.id,
-        "default",
-        "Publication",
+        type_app,
         description,
         facebookLink,
-        whatsappLink
+        whatsappLink,
+        imagePaths
       );
 
-      // Réinitialiser le formulaire
       setDescription("");
       setImages([]);
       setFacebookLink("");
-      setWhatsappLink("");
+      setWhatsappNumber("");
       setShowModal(false);
     } catch (error) {
-      // L'erreur est déjà gérée dans AddPulication
       console.error(error);
     }
   };
@@ -91,14 +100,16 @@ const AddPublication = () => {
         <Modal
           onClose={handleCloseModal}
           onPublish={handlePublish}
+          type_app={type_app}
+          setType_app={setType_app}
           description={description}
           setDescription={setDescription}
           images={images}
           setImages={setImages}
           facebookLink={facebookLink}
           setFacebookLink={setFacebookLink}
-          whatsappLink={whatsappLink}
-          setWhatsappLink={setWhatsappLink}
+          whatsappNumber={whatsappNumber}
+          setWhatsappNumber={setWhatsappNumber}
         />
       )}
     </div>
