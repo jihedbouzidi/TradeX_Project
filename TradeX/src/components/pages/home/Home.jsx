@@ -118,6 +118,7 @@ const fetchPublications = async () => {
 
         {!loading && !error && (
           <>
+          
             {posts.length === 0 ? (
               <div className={styles.noResults}>Aucune publication trouvée</div>
             ) : (

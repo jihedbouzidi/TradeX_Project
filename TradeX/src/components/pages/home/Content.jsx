@@ -1,8 +1,37 @@
 /* eslint-disable react/prop-types */
+import { useState } from "react";
 import styles from "./Home.module.css";
-import { FaWhatsapp, FaFacebook, FaShoppingCart } from "react-icons/fa"; 
+import { FaWhatsapp, FaFacebook, FaShoppingCart, FaTimes } from "react-icons/fa";
 
 const Content = ({ user, description, images, date_pub, facebook, whatsapp }) => {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const handleImageClick = (imageUrl, index) => {
+    setSelectedImage(imageUrl);
+    setCurrentImageIndex(index);
+  };
+
+  const closeModal = (e) => {
+    if (e.target === e.currentTarget || e.target.classList.contains('closeButton')) {
+      setSelectedImage(null);
+    }
+  };
+
+  const navigateImage = (direction) => {
+    if (!images || images.length === 0) return;
+    
+    let newIndex;
+    if (direction === 'prev') {
+      newIndex = (currentImageIndex - 1 + images.length) % images.length;
+    } else {
+      newIndex = (currentImageIndex + 1) % images.length;
+    }
+    
+    setSelectedImage(images[newIndex]);
+    setCurrentImageIndex(newIndex);
+  };
+
   return (
     <div className={styles.content}>
       <div className={styles.headerSection}>
@@ -38,8 +67,58 @@ const Content = ({ user, description, images, date_pub, facebook, whatsapp }) =>
               className={styles.publicationImage}
               alt={`Publication ${index + 1}`}
               loading="lazy"
+              onClick={() => handleImageClick(image, index)}
+              style={{ cursor: "pointer" }}
             />
           ))}
+        </div>
+      )}
+
+      {selectedImage && (
+        <div className={styles.imageModal} onClick={closeModal}>
+          <div className={styles.modalContent}>
+            <button 
+              className={`${styles.closeButton} closeButton`} 
+              onClick={closeModal}
+              aria-label="Fermer"
+            >
+              <FaTimes />
+            </button>
+            
+            {images.length > 1 && (
+              <>
+                <button 
+                  className={styles.navButton} 
+                  style={{ left: '20px' }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigateImage('prev');
+                  }}
+                  aria-label="Image précédente"
+                >
+                  &lt;
+                </button>
+                <button 
+                  className={styles.navButton} 
+                  style={{ right: '20px' }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigateImage('next');
+                  }}
+                  aria-label="Image suivante"
+                >
+                  &gt;
+                </button>
+              </>
+            )}
+            
+            <img
+              src={selectedImage}
+              className={styles.fullSizeImage}
+              alt="Image en grand"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
         </div>
       )}
 

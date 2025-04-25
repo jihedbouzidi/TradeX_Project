@@ -3,7 +3,7 @@
   background-color: #ffffff;
   padding: 40px;
   border-radius: 10px;
-  box-shadow: 0px 4px 20px 7px rgba(0, 0, 0, 0.05);
+  box-shadow: 2px 7px 35px 10px rgba(11, 46, 150, 0.258);
   width: 1600px;
   min-height: 700px;
   margin: 50px auto;
@@ -37,14 +37,15 @@
   background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0px 4px 20px 7px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 8px 25px 10px rgba(0, 0, 0, 0.131);
   margin-bottom: 20px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .content:hover {
   transform: translateY(-5px);
-  box-shadow: 0px 8px 25px 10px rgba(0, 0, 0, 0.1);
+  
+  box-shadow: 0px 4px 20px 7px rgba(115, 134, 154, 0.681);
 }
 
 .content img {
@@ -356,4 +357,74 @@ button:hover {
 
 .cartIcon {
   font-size: 18px;
+}
+.imageModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 10px;
+  background-color: rgba(143, 143, 143, 0.543);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.modalContent {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fullSizeImage {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.closeButton {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+  transition: transform 0.2s ease;
+}
+
+.closeButton:hover {
+  transform: scale(1.2);
+}
+
+.navButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.3);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.navButton:hover {
+  background-color: rgba(255, 255, 255, 0.5);
 }
