@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./Filtrage.module.css";
 import PcOptions from "./PcOptions";
 import MobileOptions from "./MobileOptions";
@@ -11,6 +11,17 @@ const Filtrage = ({ onFilterChange }) => {
     pcOptions: {},
     mobileOptions: {}
   });
+
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsSticky(window.scrollY > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleSearchChange = (e) => {
     setFilters(prev => ({ ...prev, search: e.target.value }));
@@ -49,7 +60,7 @@ const Filtrage = ({ onFilterChange }) => {
   };
 
   return (
-    <div className={styles.filterSection}>
+    <div className={`${styles.filterSection} ${isSticky ? styles.sticky : ''}`}>
       <div className={styles.filterColumn}>
         <h2>Recherche</h2>
         <div className={styles.searchContainer}>
@@ -61,7 +72,6 @@ const Filtrage = ({ onFilterChange }) => {
             onChange={handleSearchChange}
             onKeyPress={(e) => e.key === 'Enter' && handleSearchClick()}
           />
-          <br /> <br />
           <button 
             className={styles.searchButton}
             onClick={handleSearchClick}

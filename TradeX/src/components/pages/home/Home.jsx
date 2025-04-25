@@ -107,7 +107,10 @@ const fetchPublications = async () => {
 
   return (
     <div className={styles.accountPage}>
+      <div className={styles.filterContainer}>
       <Filtrage onFilterChange={handleFilterChange} />
+    </div>
+      
       <div className={styles.mainContent}>
         <AddPublication />
 

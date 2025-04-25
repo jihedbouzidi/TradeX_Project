@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import styles from "./Home.module.css";
-import { FaWhatsapp, FaFacebook, FaShoppingCart, FaTimes } from "react-icons/fa";
+import { FaWhatsapp, FaFacebook, FaShoppingCart } from "react-icons/fa";
 
 const Content = ({ user, description, images, date_pub, facebook, whatsapp }) => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -77,13 +77,6 @@ const Content = ({ user, description, images, date_pub, facebook, whatsapp }) =>
       {selectedImage && (
         <div className={styles.imageModal} onClick={closeModal}>
           <div className={styles.modalContent}>
-            <button 
-              className={`${styles.closeButton} closeButton`} 
-              onClick={closeModal}
-              aria-label="Fermer"
-            >
-              <FaTimes />
-            </button>
             
             {images.length > 1 && (
               <>
@@ -121,7 +114,6 @@ const Content = ({ user, description, images, date_pub, facebook, whatsapp }) =>
           </div>
         </div>
       )}
-
       <div className={styles.interestedSection}>
         <h3 style={{ color: "#243c5e" }}>Contact</h3>
         <div className={styles.socialButtons}>
@@ -136,6 +128,7 @@ const Content = ({ user, description, images, date_pub, facebook, whatsapp }) =>
               WhatsApp
             </a>
           )}
+          
           {facebook && (
             <a
               href={facebook}
