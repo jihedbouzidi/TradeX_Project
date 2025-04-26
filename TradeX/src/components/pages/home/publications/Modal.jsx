@@ -42,14 +42,6 @@ const Modal = ({
       }
 
       await onPublish();
-
-      toast.success("Publication ajoutée avec succès!", {
-        position: "top-center",
-        style: {
-          background: "#000",
-          color: "#fff",
-        },
-      });
     } catch (error) {
       toast.error(error.message || "Erreur lors de la publication", {
         position: "top-center",

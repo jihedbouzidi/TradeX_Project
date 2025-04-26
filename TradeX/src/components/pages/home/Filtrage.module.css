@@ -1,17 +1,17 @@
 .filterSection {
-  margin-top: 65px;
+  margin-top: 150px;
   width: 370px;
   background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(54, 54, 54, 0.373);
-  height: 85vh;
+  height: 60vh;
   transition: all 0.3s ease;
   margin-right: 30px;
   position: relative;
   z-index: 10;
 }
-searchButton
+
 .filterSection.sticky {
   position: fixed;
   top: 20px;
@@ -78,7 +78,7 @@ searchButton
 }
 
 .searchButton:disabled {
-  background-color: #63a7ff;
+  background-color: #8cb5e9;
   cursor: not-allowed;
 }
 

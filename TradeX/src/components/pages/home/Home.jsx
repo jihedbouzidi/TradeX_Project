@@ -34,39 +34,9 @@ const fetchPublications = async () => {
     }
 
     // Options PC
-    if (filters.type === "pc") {
-      if (filters.pcOptions.disqueDurType) {
-        params.disqueDurType = filters.pcOptions.disqueDurType;
-      }
-      if (filters.pcOptions.disqueDurCapacite) {
-        params.disqueDurCapacite = filters.pcOptions.disqueDurCapacite;
-      }
-      if (filters.pcOptions.ramValue) {
-        params.ram = filters.pcOptions.ramValue;
-      }
-      if (filters.pcOptions.carteGraphiqueValue) {
-        params.carteGraphique = filters.pcOptions.carteGraphiqueValue;
-      }
-      if (filters.pcOptions.processeurValue) {
-        params.processeur = filters.pcOptions.processeurValue;
-      }
-    }
+    
 
-    // Options Mobile
-    if (filters.type === "mobile") {
-      if (filters.mobileOptions.cameraValue) {
-        params.camera = filters.mobileOptions.cameraValue;
-      }
-      if (filters.mobileOptions.stockageValue) {
-        params.stockage = filters.mobileOptions.stockageValue;
-      }
-      if (filters.mobileOptions.ramValue) {
-        params.ram = filters.mobileOptions.ramValue;
-      }
-      if (filters.mobileOptions.batterieValue) {
-        params.batterie = filters.mobileOptions.batterieValue;
-      }
-    }
+    
 
     const response = await api.get("/AffPublication.php", params);
     

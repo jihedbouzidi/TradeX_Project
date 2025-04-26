@@ -1,8 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import styles from "./Filtrage.module.css";
-import PcOptions from "./PcOptions";
-import MobileOptions from "./MobileOptions";
 
 const Filtrage = ({ onFilterChange }) => {
   const [filters, setFilters] = useState({
@@ -47,17 +45,8 @@ const Filtrage = ({ onFilterChange }) => {
     onFilterChange(newFilters);
   };
 
-  const handlePcOptionChange = (options) => {
-    const newFilters = { ...filters, pcOptions: options };
-    setFilters(newFilters);
-    onFilterChange(newFilters);
-  };
-
-  const handleMobileOptionChange = (options) => {
-    const newFilters = { ...filters, mobileOptions: options };
-    setFilters(newFilters);
-    onFilterChange(newFilters);
-  };
+  
+  
 
   return (
     <div className={`${styles.filterSection} ${isSticky ? styles.sticky : ''}`}>
@@ -95,19 +84,7 @@ const Filtrage = ({ onFilterChange }) => {
         </select>
       </div>
 
-      {filters.type === "pc" && (
-        <PcOptions
-          pcOptions={filters.pcOptions}
-          onPcOptionChange={handlePcOptionChange}
-        />
-      )}
-
-      {filters.type === "mobile" && (
-        <MobileOptions
-          mobileOptions={filters.mobileOptions}
-          onMobileOptionChange={handleMobileOptionChange}
-        />
-      )}
+      
     </div>
   );
 };
