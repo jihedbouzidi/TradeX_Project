@@ -10,6 +10,8 @@ const Modal = ({
   setType_app,
   description,
   setDescription,
+  objectif,
+  setObjectif,
   images,
   setImages,
   facebookLink,
@@ -28,10 +30,60 @@ const Modal = ({
     setImages(newImages);
   };
 
-  const handlePublishWithCharacteristics = async () => {
+  const handlePublish = async () => {
     try {
+      if (!facebookLink && !whatsappNumber) {
+        toast.error("Veuillez ajouter au moins un contact (Facebook ou WhatsApp)", {
+          position: "top-center",
+          style: {
+            background: "#000",
+            color: "#fff",
+          },
+        });
+        return;
+      }
+      
+      // Validation spécifique pour WhatsApp si le numéro est fourni
+      if (whatsappNumber) {
+        // Supprimer tous les caractères non numériques
+        const cleanedNumber = whatsappNumber.replace(/\D/g, '');
+        
+        // Vérifier si le numéro a une longueur valide (au moins 8 chiffres)
+        if (cleanedNumber.length < 8) {
+          toast.error("Le numéro WhatsApp doit contenir au moins 8 chiffres", {
+            position: "top-center",
+            style: {
+              background: "#000",
+              color: "#fff",
+            },
+          });
+          return;
+        }
+      }
+      
+      // Validation optionnelle pour Facebook si le lien est fourni
+      if (facebookLink && !facebookLink.includes('facebook.com')) {
+        toast.error("Veuillez entrer un lien Facebook valide", {
+          position: "top-center",
+          style: {
+            background: "#000",
+            color: "#fff",
+          },
+        });
+        return;
+      }
       if (!description.trim()) {
         toast.error("Veuillez ajouter une description", {
+          position: "top-center",
+          style: {
+            background: "#000",
+            color: "#fff",
+          },
+        });
+        return;
+      }
+      if (!objectif.trim()) {
+        toast.error("Veuillez ajouter une Objectif", {
           position: "top-center",
           style: {
             background: "#000",
@@ -50,7 +102,7 @@ const Modal = ({
           color: "#fff",
         },
       });
-      console.error(error);
+      console.error("le erreur est ", error);
     }
   };
 
@@ -71,6 +123,14 @@ const Modal = ({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Décrivez votre publication..."
+              rows={5}
+            />
+            <label htmlFor="Objectif">Mon Objectif :</label>
+            <textarea
+              className={styles.modalDesc}
+              value={objectif}
+              onChange={(e) => setObjectif(e.target.value)}
+              placeholder="Décrivez votre Objectif..."
               rows={5}
             />
             <select
@@ -153,7 +213,7 @@ const Modal = ({
             </button>
             <button
               className={styles.publishButton}
-              onClick={handlePublishWithCharacteristics}
+              onClick={handlePublish}
             >
               Publier
             </button>

@@ -7,5 +7,5 @@ export const AuthContext = createContext({
   register: async () => {},
   logout: () => {},
   updateProfile: async () => {},
-  AddPulication: async () => {},
+  AddPublication: async () => {},
 });

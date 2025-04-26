@@ -15,6 +15,7 @@
   animation: fadeIn 0.5s ease-in-out;
   
 }
+
 .filterContainer {
   width: 370px;
   flex-shrink: 0;
@@ -190,8 +191,8 @@ button:hover {
 }
 
 .profilePhoto {
-  height: 50px;
-  width: 50px;
+  height: 55px;
+  width: 55px;
 }
 
 .profilePhoto:hover {
@@ -221,7 +222,58 @@ button:hover {
   margin-bottom: 15px;
   line-height: 1.5;
 }
+.deviceType {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
+.deviceIcon {
+  font-size: 2rem;
+  color: #495057;
+}
+.objectif {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+.objectifContainer {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.objectifHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.objectifIcon {
+  color: #28a745;
+  font-size: 1.5rem;
+}
+
+.objectifContent {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.arrowIcon {
+  color: #6c757d;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.objectifText {
+  margin: 0;
+  color: #495057;
+  line-height: 1.6;
+}
 .imagesContainer {
   display: flex;
   flex-wrap: wrap;

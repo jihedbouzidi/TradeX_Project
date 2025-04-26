@@ -176,10 +176,11 @@ export const AuthProvider = ({ children }) => {
   
   
 
-  const AddPulication = async (
+  const AddPublication = async (
     idUser,
     type_app,
     desc,
+    objectif,
     facebook,
     whatsapp,
     images = []
@@ -194,12 +195,25 @@ export const AuthProvider = ({ children }) => {
             utilisateur_id: idUser,
             type: type_app,
             description: desc,
+            objectif: objectif,
             facebookLink: facebook,
             whatsappLink: whatsapp,
             images: images
           }),
         }
       );
+  
+      // Vérifiez d'abord que la réponse existe
+      if (!response) {
+        throw new Error("Aucune réponse du serveur");
+      }
+  
+      // Vérifiez le Content-Type avant de parser le JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text();
+        throw new Error(`Réponse inattendue: ${text}`);
+      }
   
       const result = await response.json();
   
@@ -218,6 +232,7 @@ export const AuthProvider = ({ children }) => {
         );
       }
     } catch (error) {
+      console.error("Erreur détaillée:", error);
       toast.error(error.message || "Erreur lors de l'ajout de la publication", {
         position: "top-center",
         style: {
@@ -240,7 +255,7 @@ export const AuthProvider = ({ children }) => {
         register,
         logout,
         updateProfile,
-        AddPulication,
+        AddPublication,
       }}
     >
       {children}

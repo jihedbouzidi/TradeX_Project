@@ -1,9 +1,26 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import styles from "./Home.module.css";
-import { FaWhatsapp, FaFacebook, FaShoppingCart } from "react-icons/fa";
+import { 
+  FaWhatsapp, 
+  FaFacebook, 
+  FaShoppingCart,
+  FaBullseye,
+  FaArrowRight,
+  FaDesktop, 
+  FaMobileAlt 
+} from "react-icons/fa";
 
-const Content = ({ user, description, images, date_pub, facebook, whatsapp }) => {
+const Content = ({
+  user,
+  description,
+  objectif,
+  images,
+  type,
+  date_pub,
+  facebook,
+  whatsapp,
+}) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -13,21 +30,24 @@ const Content = ({ user, description, images, date_pub, facebook, whatsapp }) =>
   };
 
   const closeModal = (e) => {
-    if (e.target === e.currentTarget || e.target.classList.contains('closeButton')) {
+    if (
+      e.target === e.currentTarget ||
+      e.target.classList.contains("closeButton")
+    ) {
       setSelectedImage(null);
     }
   };
 
   const navigateImage = (direction) => {
     if (!images || images.length === 0) return;
-    
+
     let newIndex;
-    if (direction === 'prev') {
+    if (direction === "prev") {
       newIndex = (currentImageIndex - 1 + images.length) % images.length;
     } else {
       newIndex = (currentImageIndex + 1) % images.length;
     }
-    
+
     setSelectedImage(images[newIndex]);
     setCurrentImageIndex(newIndex);
   };
@@ -45,10 +65,11 @@ const Content = ({ user, description, images, date_pub, facebook, whatsapp }) =>
           </a>
           <a href={user.LinkProfile} className={styles.profileLink}>
             <strong className={styles.nom}>{user.nom}</strong>
+            <br />
+            <i>{new Date(date_pub).toLocaleString()}</i>
           </a>
-          <br />
-          <br />
-          <i>{new Date(date_pub).toLocaleString()}</i>
+          
+          
         </div>
         <button className={styles.addToCartButton}>
           <FaShoppingCart className={styles.cartIcon} />
@@ -56,8 +77,20 @@ const Content = ({ user, description, images, date_pub, facebook, whatsapp }) =>
         </button>
       </div>
 
+      <div className={styles.deviceType}>
+        {type === "pc" ? (
+          <FaDesktop className={styles.deviceIcon} title="Ordinateur" />
+        ) : (
+          <FaMobileAlt className={styles.deviceIcon} title="Mobile" />
+        )}
+      </div>
+      <br />
       <p className={styles.description}>{description}</p>
+      <hr />
+      <br />
       
+     
+
       {images && images.length > 0 && (
         <div className={styles.imagesContainer}>
           {images.map((image, index) => (
@@ -73,30 +106,39 @@ const Content = ({ user, description, images, date_pub, facebook, whatsapp }) =>
           ))}
         </div>
       )}
-
+      <hr />
+      <div className={styles.objectifContainer}>
+        <div className={styles.objectifHeader}>
+          <FaBullseye className={styles.objectifIcon} />
+          <h3 style={{ color: "green", marginLeft: "8px" }}>Mon Objectif</h3>
+        </div>
+        <div className={styles.objectifContent}>
+          <FaArrowRight className={styles.arrowIcon} />
+          <p className={styles.objectifText}>{objectif}</p>
+        </div>
+      </div>
       {selectedImage && (
         <div className={styles.imageModal} onClick={closeModal}>
           <div className={styles.modalContent}>
-            
             {images.length > 1 && (
               <>
-                <button 
-                  className={styles.navButton} 
-                  style={{ left: '20px' }}
+                <button
+                  className={styles.navButton}
+                  style={{ left: "20px" }}
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigateImage('prev');
+                    navigateImage("prev");
                   }}
                   aria-label="Image précédente"
                 >
                   &lt;
                 </button>
-                <button 
-                  className={styles.navButton} 
-                  style={{ right: '20px' }}
+                <button
+                  className={styles.navButton}
+                  style={{ right: "20px" }}
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigateImage('next');
+                    navigateImage("next");
                   }}
                   aria-label="Image suivante"
                 >
@@ -104,7 +146,7 @@ const Content = ({ user, description, images, date_pub, facebook, whatsapp }) =>
                 </button>
               </>
             )}
-            
+
             <img
               src={selectedImage}
               className={styles.fullSizeImage}
@@ -128,7 +170,7 @@ const Content = ({ user, description, images, date_pub, facebook, whatsapp }) =>
               WhatsApp
             </a>
           )}
-          
+
           {facebook && (
             <a
               href={facebook}

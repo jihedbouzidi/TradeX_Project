@@ -12,59 +12,56 @@ export const Home = () => {
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
     search: "",
+    objectif: "",
     type: "toutes",
-    pcOptions: {},
-    mobileOptions: {},
+  });
 
-});
+  const fetchPublications = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const params = {};
+      
+      if (filters.search) {
+        params.search = filters.search;
+      }
+      if (filters.objectif) {
+        params.objectif = filters.objectif;
+      }
+      if (filters.type !== "toutes") {
+        params.type = filters.type;
+      }
 
-const fetchPublications = async () => {
-  setLoading(true);
-  setError(null);
-  try {
-    // Construire les paramètres de requête
-    const params = {};
-    
-    if (filters.search) {
-      params.search = filters.search;
-    }
-    
-    if (filters.type !== "toutes") {
-      params.type = filters.type;
-    }
-
-    // Options PC
-    
-
-    
-
-    const response = await api.get("/AffPublication.php", params);
-    
-    if (response && response.publications) {
-      setPosts(
-        response.publications.map((pub) => ({
-          id: pub.id,
-          user: pub.user,
-          description: pub.description,
-          images: pub.images,
-          date_pub: pub.date_pub,
-          facebook: pub.facebookLink,
-          whatsapp: pub.whatsappLink,
-        }))
+      const response = await api.get("/AffPublication.php", params);
+      
+      if (response && response.publications) {
+        setPosts(
+          response.publications.map((pub) => ({
+            id: pub.id,
+            user: pub.user,
+            description: pub.description,
+            objectif: pub.objectif,
+            images: pub.images,
+            type: pub.type, // Utilisation de 'type' au lieu de 'type_app'
+            date_pub: pub.date_pub,
+            facebook: pub.facebookLink,
+            whatsapp: pub.whatsappLink,
+          }))
+        );
+      } else {
+        setPosts([]);
+      }
+    } catch (error) {
+      console.error("Error fetching publications:", error);
+      setError(
+        error.message ||
+        "Erreur de connexion au serveur. Veuillez vérifier que le serveur est en cours d'exécution."
       );
-    } else {
-      setPosts([]);
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error("Error fetching publications:", error);
-    setError(
-      error.message ||
-      "Erreur de connexion au serveur. Veuillez vérifier que le serveur est en cours d'exécution."
-    );
-  } finally {
-    setLoading(false);
-  }
-};
+  };
+
   useEffect(() => {
     fetchPublications();
   }, [filters]);
@@ -73,13 +70,11 @@ const fetchPublications = async () => {
     setFilters(newFilters);
   };
 
-  
-
   return (
     <div className={styles.accountPage}>
       <div className={styles.filterContainer}>
-      <Filtrage onFilterChange={handleFilterChange} />
-    </div>
+        <Filtrage onFilterChange={handleFilterChange} />
+      </div>
       
       <div className={styles.mainContent}>
         <AddPublication />
@@ -91,7 +86,6 @@ const fetchPublications = async () => {
 
         {!loading && !error && (
           <>
-          
             {posts.length === 0 ? (
               <div className={styles.noResults}>Aucune publication trouvée</div>
             ) : (
@@ -102,7 +96,9 @@ const fetchPublications = async () => {
                     key={post.id}
                     user={post.user}
                     description={post.description}
+                    objectif={post.objectif}
                     images={post.images}
+                    type={post.type}
                     date_pub={post.date_pub}
                     facebook={post.facebook}
                     whatsapp={post.whatsapp}
@@ -115,4 +111,5 @@ const fetchPublications = async () => {
     </div>
   );
 };
+
 export default Home;

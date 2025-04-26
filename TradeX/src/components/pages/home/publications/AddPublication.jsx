@@ -9,11 +9,12 @@ import { toast } from "react-hot-toast";
 const AddPublication = () => {
   const [showModal, setShowModal] = useState(false);
   const [description, setDescription] = useState("");
+  const [objectif, setObjectif] = useState("");
   const [type_app, setType_app] = useState("");
   const [images, setImages] = useState([]);
   const [facebookLink, setFacebookLink] = useState("");
   const [whatsappNumber, setWhatsappNumber] = useState("");
-  const { user, AddPulication } = useAuth();
+  const { user, AddPublication } = useAuth();
   const navigate = useNavigate();
 
   const handleAddPublicationClick = () => {
@@ -39,34 +40,56 @@ const AddPublication = () => {
       if (!user) {
         throw new Error("Utilisateur non connecté");
       }
-
+  
       const whatsappLink = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "";
-
-      // Extraire les noms des fichiers avec leurs extensions
+  
       const imagePaths = images.map(image => {
         if (image instanceof File) {
-          return image.name; // Retourne le nom du fichier avec extension
+          return image.name; 
         }
-        // Si c'est déjà un chemin, retourne seulement le nom du fichier
         return image.split('/').pop();
       });
-
-      await AddPulication(
+  
+      // Ajoutez un log pour vérifier les données envoyées
+      console.log("Données envoyées:", {
+        user: user.id,
+        type_app,
+        description,
+        objectif,
+        facebookLink,
+        whatsappLink,
+        imagePaths
+      });
+  
+      const result = await AddPublication(
         user.id,
         type_app,
         description,
+        objectif,
         facebookLink,
         whatsappLink,
         imagePaths
       );
-
-      setDescription("");
-      setImages([]);
-      setFacebookLink("");
-      setWhatsappNumber("");
-      setShowModal(false);
+  
+      if (result && result.status === "success") {
+        setDescription("");
+        setObjectif("");
+        setImages([]);
+        setFacebookLink("");
+        setWhatsappNumber("");
+        setShowModal(false);
+      } else {
+        throw new Error(result?.message || "Erreur inconnue");
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Erreur lors de la publication:", error);
+      toast.error(error.message || "Erreur lors de la publication", {
+        position: "top-center",
+        style: {
+          background: "#000",
+          color: "#fff",
+        },
+      });
     }
   };
 
@@ -104,6 +127,8 @@ const AddPublication = () => {
           setType_app={setType_app}
           description={description}
           setDescription={setDescription}
+          objectif={objectif}
+          setObjectif={setObjectif}
           images={images}
           setImages={setImages}
           facebookLink={facebookLink}

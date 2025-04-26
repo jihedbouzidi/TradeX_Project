@@ -1,5 +1,5 @@
 export const api = {
-  baseUrl: "http://localhost/Backend_TradeX", // Retirer le port 80 car c'est le port par défaut
+  baseUrl: "http://localhost/Backend_TradeX",
 
   async request(endpoint, method = "GET", data = null, params = null) {
     const url = new URL(`${this.baseUrl}${endpoint}`);

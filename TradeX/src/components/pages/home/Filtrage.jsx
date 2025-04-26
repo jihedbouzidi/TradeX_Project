@@ -5,9 +5,8 @@ import styles from "./Filtrage.module.css";
 const Filtrage = ({ onFilterChange }) => {
   const [filters, setFilters] = useState({
     search: '',
+    objectif: '',
     type: 'toutes',
-    pcOptions: {},
-    mobileOptions: {}
   });
 
   const [isSticky, setIsSticky] = useState(false);
@@ -24,12 +23,23 @@ const Filtrage = ({ onFilterChange }) => {
   const handleSearchChange = (e) => {
     setFilters(prev => ({ ...prev, search: e.target.value }));
   };
+  const handleObjectifChange = (e) => {
+    setFilters(prev => ({ ...prev, objectif: e.target.value }));
+  };
 
   const handleSearchClick = () => {
     const newFilters = { 
       ...filters,
-      pcOptions: filters.type === 'pc' ? filters.pcOptions : {},
-      mobileOptions: filters.type === 'mobile' ? filters.mobileOptions : {}
+      // pcOptions: filters.type === 'pc' ? filters.pcOptions : {},
+      // mobileOptions: filters.type === 'mobile' ? filters.mobileOptions : {}
+    };
+    onFilterChange(newFilters);
+  };
+  const handleObjectifClick = () => {
+    const newFilters = { 
+      ...filters,
+      // pcOptions: filters.type === 'pc' ? filters.pcOptions : {},
+      // mobileOptions: filters.type === 'mobile' ? filters.mobileOptions : {}
     };
     onFilterChange(newFilters);
   };
@@ -67,6 +77,26 @@ const Filtrage = ({ onFilterChange }) => {
             disabled={!filters.search}
           >
             Rechercher
+          </button>
+        </div>
+      </div>
+      <div className={styles.filterColumn}>
+        <h2>Objectif</h2>
+        <div className={styles.searchContainer}>
+          <input
+            type="text"
+            placeholder="Rechercher..."
+            className={styles.searchInput}
+            value={filters.objectif}
+            onChange={handleObjectifChange}
+            onKeyPress={(e) => e.key === 'Enter' && handleObjectifClick()}
+          />
+          <button 
+            className={styles.searchButton}
+            onClick={handleObjectifClick}
+            disabled={!filters.objectif}
+          >
+            Rechercher objectif
           </button>
         </div>
       </div>
