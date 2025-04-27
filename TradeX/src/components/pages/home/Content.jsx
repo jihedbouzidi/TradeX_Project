@@ -1,18 +1,20 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import styles from "./Home.module.css";
-import { 
-  FaWhatsapp, 
-  FaFacebook, 
+import { useAuth } from "../../../hooks/useAuth";
+import {
+  FaWhatsapp,
+  FaFacebook,
   FaShoppingCart,
   FaBullseye,
   FaArrowRight,
-  FaDesktop, 
-  FaMobileAlt 
+  FaDesktop,
+  FaMobileAlt,
 } from "react-icons/fa";
 
 const Content = ({
   user,
+  idPublication,
   description,
   objectif,
   images,
@@ -23,6 +25,7 @@ const Content = ({
 }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { addToPanier  } = useAuth();
 
   const handleImageClick = (imageUrl, index) => {
     setSelectedImage(imageUrl);
@@ -68,10 +71,11 @@ const Content = ({
             <br />
             <i>{new Date(date_pub).toLocaleString()}</i>
           </a>
-          
-          
         </div>
-        <button className={styles.addToCartButton}>
+        <button
+          className={styles.addToCartButton}
+          onClick={() => addToPanier(idPublication)} 
+        >
           <FaShoppingCart className={styles.cartIcon} />
           Ajouter au panier
         </button>
@@ -88,8 +92,6 @@ const Content = ({
       <p className={styles.description}>{description}</p>
       <hr />
       <br />
-      
-     
 
       {images && images.length > 0 && (
         <div className={styles.imagesContainer}>

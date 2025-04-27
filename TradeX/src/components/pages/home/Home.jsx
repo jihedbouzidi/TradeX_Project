@@ -42,7 +42,7 @@ export const Home = () => {
             description: pub.description,
             objectif: pub.objectif,
             images: pub.images,
-            type: pub.type, // Utilisation de 'type' au lieu de 'type_app'
+            type: pub.type, 
             date_pub: pub.date_pub,
             facebook: pub.facebookLink,
             whatsapp: pub.whatsappLink,
@@ -95,6 +95,7 @@ export const Home = () => {
                   <Content
                     key={post.id}
                     user={post.user}
+                    idPublication={post.id}
                     description={post.description}
                     objectif={post.objectif}
                     images={post.images}

@@ -243,6 +243,71 @@ export const AuthProvider = ({ children }) => {
       throw error;
     }
   };
+  const addToPanier = async (publication_id) => {
+    if (!user?.id) {
+        toast.error("Veuillez vous connecter pour ajouter au panier");
+        return false;
+    }
+
+    try {
+        const response = await fetch("http://localhost/Backend_TradeX/AddPanier.php", {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                utilisateur_id: user.id,
+                publication_id: publication_id
+            }),
+        });
+
+        // Lire la réponse une seule fois
+        const responseData = await response.text();
+        let result;
+        
+        try {
+            result = JSON.parse(responseData);
+        } catch (e) {
+            console.error("Failed to parse JSON:", responseData);
+            throw new Error("Réponse serveur invalide",e);
+        }
+
+        if (!response.ok) {
+            throw new Error(result.message || `Erreur serveur: ${response.status}`);
+        }
+
+        if (result.status !== 'success') {
+            throw new Error(result.message || "Erreur lors de l'ajout au panier", {
+        position: "top-center",
+        style: {
+          background: "#000",
+          color: "#fff",
+        },
+      });
+        }
+
+        toast.success(result.message || "Article ajouté au panier", {
+          position: "top-center",
+          style: {
+            background: "#000",
+            color: "#fff",
+          },
+        });
+        return true;
+
+    } catch (error) {
+        console.error("Erreur addToPanier:", error);
+        toast.error(error.message || "Erreur lors de l'ajout au panier", {
+          position: "top-center",
+          style: {
+            background: "#000",
+            color: "#fff",
+          },
+        });
+        return false;
+    }
+};
 
 
 
@@ -256,6 +321,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         updateProfile,
         AddPublication,
+        addToPanier,
       }}
     >
       {children}

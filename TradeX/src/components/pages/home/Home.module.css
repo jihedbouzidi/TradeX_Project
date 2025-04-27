@@ -1,9 +1,11 @@
 .accountPage {
   font-family: "Nunito", sans-serif;
-  background-color: #ffffff;
+  background: linear-gradient(135deg, #2A7B9B 0%, #3A9BBD 50%, #4ABCE0 100%);
   padding: 40px;
   border-radius: 10px;
-  box-shadow: 2px 7px 35px 10px rgba(11, 46, 150, 0.258);
+  box-shadow: 
+  0 10px 30px rgba(0, 0, 0, 0.2),
+  0 5px 10px rgba(0, 0, 0, 0.1);
   width: 1600px;
   min-height: 700px;
   margin: 50px auto;
@@ -12,10 +14,29 @@
   gap: 30px;
   position: relative;
   z-index: 1;
-  animation: fadeIn 0.5s ease-in-out;
+  animation: 
+    fadeIn 0.8s ease-out,
+    gradientShift 15s ease infinite alternate;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   
 }
 
+@keyframes fadeIn {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 .filterContainer {
   width: 370px;
   flex-shrink: 0;
@@ -77,11 +98,9 @@
   border-radius: 4px;
   transition: background-color 0.3s ease;
 }
-
 .comment:hover {
   background-color: #e9ecef;
 }
-
 textarea {
   width: 100%;
   padding: 10px;
@@ -93,7 +112,6 @@ textarea {
   font-size: 14px;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
-
 textarea:focus {
   border-color: #007bff;
   box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
@@ -133,7 +151,7 @@ button:hover {
   .accountPage {
     padding: 20px;
   }
-
+  
   .content {
     padding: 15px;
   }
@@ -141,7 +159,6 @@ button:hover {
   .content img {
     max-width: 100%;
   }
-
   .comment {
     padding: 8px;
   }
@@ -155,7 +172,6 @@ button:hover {
     font-size: 14px;
   }
 }
-
 @media (max-width: 500px) {
   .accountPage {
     padding: 15px;
