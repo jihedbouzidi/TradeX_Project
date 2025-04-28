@@ -1,6 +1,6 @@
 .accountPage {
   font-family: "Nunito", sans-serif;
-  background: linear-gradient(135deg, #2A7B9B 0%, #3A9BBD 50%, #4ABCE0 100%);
+  background: linear-gradient(135deg, #2C3E50 0%, #4A6491 50%, #7FB3D5 100%);
   padding: 40px;
   border-radius: 10px;
   box-shadow: 
@@ -14,11 +14,15 @@
   gap: 30px;
   position: relative;
   z-index: 1;
-  animation: 
-    fadeIn 0.8s ease-out,
-    gradientShift 15s ease infinite alternate;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation: gradientShift 15s ease infinite alternate;
+background-size: 200% 200%;
   
+}
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 @keyframes fadeIn {
