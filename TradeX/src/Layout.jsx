@@ -2,15 +2,15 @@
 import { Outlet, useLocation } from "react-router-dom";
 import NavBar from "./components/navbar/NavBar";
 
-const Layout = () => {
+export const Layout = () => {
   const location = useLocation();
-  const hideNavbarPaths = ["/", "/login", "/register"];
+  const hideNavbarPaths = ["/login", "/register","/compte"];
 
   const shouldShowNavbar = !hideNavbarPaths.includes(location.pathname);
 
   return (
     <>
-      {shouldShowNavbar && <NavBar/>}
+      {!shouldShowNavbar && <NavBar/>}
       <Outlet /> {/* Affiche le contenu de la page actuelle */}
     </>
   );

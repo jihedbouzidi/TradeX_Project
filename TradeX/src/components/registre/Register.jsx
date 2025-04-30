@@ -1,6 +1,6 @@
 import { useAuth } from '../../hooks/useAuth';
 import { toast } from 'react-hot-toast';
-const Register = () => {
+export const Register = () => {
   const { register } = useAuth();
 
   const handleSubmit = async (e) => {

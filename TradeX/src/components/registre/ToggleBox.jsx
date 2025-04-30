@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-const ToggleBox = ({ onRegisterClick, onLoginClick }) => {
+export const ToggleBox = ({ onRegisterClick, onLoginClick }) => {
+  
   return (
     <div className="toggle-box">
       <div className="toggle-panel toggle-left">

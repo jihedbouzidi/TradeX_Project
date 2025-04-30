@@ -119,13 +119,6 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
-    toast.success("Déconnexion réussie!", {
-      position: "top-center",
-      style: {
-        background: "#000",
-        color: "#fff",
-      },
-    });
     return true;
   };
 

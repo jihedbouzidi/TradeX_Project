@@ -1,7 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./components/registre/Login.jsx";
-import Register from "./components/registre/Register.jsx";
-import ToggleBox from "./components/registre/ToggleBox.jsx";
 import { useState } from "react";
 import "./index.css";
 import { Home } from "./components/pages/home/Home";
@@ -14,10 +11,16 @@ import CharWithAI from "./components/pages/home/publications/ChatWithAI/ChatWith
 import VotrePub from "./components/pages/profile/vosPub/VotrePub.jsx";
 import { Toaster } from "react-hot-toast";
 import { useAuth } from "./hooks/useAuth";
+import { LogReg } from "./components/registre/LogReg.jsx";
+import NavBar from "./components/navbar/NavBar";
 
 const App = () => {
   const [isActive, setIsActive] = useState(false);
+  const [isProfile, setIsProfile] = useState(true);
   const { user } = useAuth();
+  const handleProfileClick = () => {
+    setIsProfile(!isProfile);
+  };
 
   const handleRegisterClick = () => {
     setIsActive(true);
@@ -33,32 +36,75 @@ const App = () => {
       <Router>
         <Routes>
           {/* Routes sans Layout (NavBar masquée) */}
+
           <Route
             path="/"
             element={
-              user ? (
-                <Layout />
-              ) : (
-                <div className={`container ${isActive ? "active" : ""}`}>
-                  <Login />
-                  <Register />
-                  <ToggleBox
-                    onRegisterClick={handleRegisterClick}
-                    onLoginClick={handleLoginClick}
-                  />
-                </div>
-              )
+              <>
+                <NavBar />
+                <Home />
+              </>
             }
           />
 
           <Route path="/" element={<Layout />}>
+            <Route
+              path="/logreg"
+              element={
+                user ? (
+                  <>
+                    <Layout />
+                  </>
+                ) : (
+                  <LogReg
+                    isActive={isActive}
+                    handleRegisterClick={handleRegisterClick}
+                    handleLoginClick={handleLoginClick}
+                  />
+                )
+              }
+            />
             <Route path="/compte" element={<Home />} />
-            <Route path="/contact" element={<ContactForm />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/about" element={<About />} />
+            <Route
+              path="/contact"
+              element={
+                <>
+                  <>
+                    <NavBar onProfileB={handleProfileClick} />
+                    <ContactForm />
+                  </>
+                </>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <>
+                  <NavBar onProfileB={handleProfileClick} />
+                  <Profile />
+                </>
+              }
+            />
+            <Route
+              path="/about"
+              element={
+                <>
+                  <NavBar onProfileB={handleProfileClick} />
+                  <About />
+                </>
+              }
+            />
             <Route path="/panier" element={<Panier />} />
             <Route path="/chat" element={<CharWithAI />} />
-            <Route path="/votrePub" element={<VotrePub />} />
+            <Route
+              path="/votrePub"
+              element={
+                <>
+                  <NavBar />
+                  <VotrePub />
+                </>
+              }
+            />
           </Route>
         </Routes>
       </Router>

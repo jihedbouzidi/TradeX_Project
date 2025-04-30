@@ -105,7 +105,7 @@ const AddPublication = () => {
     <div className={styles.addPublication}>
       <div className={styles.buttonContainer}>
         <button className={styles.cartButton} onClick={onPanier}>
-          <FaShoppingCart /> Panier
+          <FaShoppingCart /> Favourite
         </button>
         <button
           className={styles.addButton}

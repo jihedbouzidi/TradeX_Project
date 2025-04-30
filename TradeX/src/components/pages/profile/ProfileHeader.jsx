@@ -7,12 +7,11 @@ export const ProfileHeader = ({ photoURL, isEditing, onPhotoChange }) => {
     <div className={styles.profile_photo_container}>
       {/* Afficher l'image uniquement si photoURL n'est pas vide */}
       {photoURL ? (
-        
         <img
           src={photoURL} // Utiliser le chemin de l'image ou la data URL
           alt=""
           className={styles.profile_photo}
-          style={{backgroundColor:"#c9c9c9"}}
+          style={{ backgroundColor: "#c9c9c9" }}
         />
       ) : (
         <p>Aucune image </p>
@@ -32,8 +31,6 @@ export const ProfileHeader = ({ photoURL, isEditing, onPhotoChange }) => {
           </label>
         </>
       )}
-      
     </div>
   );
 };
-

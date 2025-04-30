@@ -3,7 +3,7 @@
 import { useState } from "react";
 import styles from "./NavBar.module.css";
 
-const ProfileMenu = ({ onProfileClick, onLogoutClick, profileData }) => {
+const ProfileMenu = ({ onProfileClick, onLogoutClick, profileData,onProfileBtn }) => {
   const [showProfileOptions, setShowProfileOptions] = useState(false);
 
   return (
@@ -12,15 +12,15 @@ const ProfileMenu = ({ onProfileClick, onLogoutClick, profileData }) => {
       onMouseEnter={() => setShowProfileOptions(true)}
       onMouseLeave={() => setShowProfileOptions(false)}
     >
-      {profileData?.photoURL && (
+      {profileData?.photoURL && (!onProfileBtn && (
         <img
-          width="40px"
-          height="40px"
+          width="50px"
+          height="50px"
           src={profileData.photoURL}
           alt="Profile"
           className={styles.profile_image}
         />
-      )}
+      ) )}
       {showProfileOptions && (
         <div className={styles.profile_options}>
           <button className={styles.profile_button} onClick={onProfileClick}>

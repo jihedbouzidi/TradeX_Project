@@ -77,7 +77,7 @@ const Content = ({
           onClick={() => addToPanier(idPublication)} 
         >
           <FaShoppingCart className={styles.cartIcon} />
-          Ajouter au panier
+          Ajouter au favourite
         </button>
       </div>
 
@@ -90,10 +90,13 @@ const Content = ({
       </div>
       <br />
       <p className={styles.description}>{description}</p>
-      <hr />
+      
+      
       <br />
 
       {images && images.length > 0 && (
+        <>
+        <hr />
         <div className={styles.imagesContainer}>
           {images.map((image, index) => (
             <img
@@ -106,7 +109,8 @@ const Content = ({
               style={{ cursor: "pointer" }}
             />
           ))}
-        </div>
+        </div></>
+        
       )}
       <hr />
       <div className={styles.objectifContainer}>

@@ -8,6 +8,7 @@ import { SocialMedia } from "./SocialMedia";
 import { ProfileActions } from "./ProfileActions";
 import { FaNewspaper } from "react-icons/fa";
 import { useAuth } from "../../../hooks/useAuth";
+import Layout from "../../../Layout";
 
 export const Profile = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export const Profile = () => {
   const handleLogout = () => {
     const success = logout();
     if (success) {
-      navigate("/");
+      navigate("/compte");
     }
   };
 
@@ -265,8 +266,9 @@ export const Profile = () => {
 
   return (
     <div className={styles.profile_container}>
+      <Layout />
       <Toaster position="top-center" />
-
+      
       <div className={styles.top_actions}>
         <button
           className={styles.publications_button}

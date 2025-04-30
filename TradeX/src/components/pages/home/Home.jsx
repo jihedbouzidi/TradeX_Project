@@ -5,6 +5,7 @@ import AddPublication from "./publications/AddPublication";
 import Content from "./Content";
 import styles from "./Home.module.css";
 import { api } from "../../../services/api";
+import Layout from "../../../Layout";
 
 export const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -72,6 +73,7 @@ export const Home = () => {
 
   return (
     <div className={styles.accountPage}>
+      <Layout />
       <div className={styles.filterContainer}>
         <Filtrage onFilterChange={handleFilterChange} />
       </div>
