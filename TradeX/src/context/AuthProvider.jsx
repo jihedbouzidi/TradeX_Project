@@ -131,14 +131,17 @@ export const AuthProvider = ({ children }) => {
           body: formData, // FormData est envoyé directement sans en-tête Content-Type
         }
       );
-  
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
+
       const result = await response.json();
-  
-      if (result.status === "success" || result.message === 'Profil mis à jour avec succès') {
+
+      if (
+        result.status === "success" ||
+        result.message === "Profil mis à jour avec succès"
+      ) {
         const updatedUser = { ...user, ...result.data }; // Adapté au format du backend
         setUser(updatedUser);
         localStorage.setItem("user", JSON.stringify(updatedUser));
@@ -166,9 +169,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  
-  
-
   const AddPublication = async (
     idUser,
     type_app,
@@ -191,25 +191,25 @@ export const AuthProvider = ({ children }) => {
             objectif: objectif,
             facebookLink: facebook,
             whatsappLink: whatsapp,
-            images: images
+            images: images,
           }),
         }
       );
-  
+
       // Vérifiez d'abord que la réponse existe
       if (!response) {
         throw new Error("Aucune réponse du serveur");
       }
-  
+
       // Vérifiez le Content-Type avant de parser le JSON
       const contentType = response.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         const text = await response.text();
         throw new Error(`Réponse inattendue: ${text}`);
       }
-  
+
       const result = await response.json();
-  
+
       if (result.status === "success") {
         toast.success("Publication ajoutée avec succès!", {
           position: "top-center",
@@ -238,71 +238,74 @@ export const AuthProvider = ({ children }) => {
   };
   const addToPanier = async (publication_id) => {
     if (!user?.id) {
-        toast.error("Veuillez vous connecter pour ajouter au panier");
-        return false;
+      toast.error("Veuillez vous connecter pour ajouter au panier");
+      return false;
     }
 
     try {
-        const response = await fetch("http://localhost/Backend_TradeX/AddPanier.php", {
-            method: "POST",
-            headers: { 
-                "Content-Type": "application/json",
-                "Accept": "application/json"
+      const response = await fetch(
+        "http://localhost/Backend_TradeX/AddPanier.php",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            utilisateur_id: user.id,
+            publication_id: publication_id,
+          }),
+        }
+      );
+
+      // Lire la réponse une seule fois
+      const responseData = await response.text();
+      let result;
+
+      try {
+        result = JSON.parse(responseData);
+      } catch (e) {
+        console.error("Failed to parse JSON:", responseData);
+        throw new Error("Réponse serveur invalide", e);
+      }
+
+      if (!response.ok) {
+        throw new Error(result.message || `Erreur serveur: ${response.status}`);
+      }
+
+      if (result.status !== "success") {
+        throw new Error(
+          result.message || "Erreur lors de l'ajout au favourite",
+          {
+            position: "top-center",
+            style: {
+              background: "#000",
+              color: "#fff",
             },
-            body: JSON.stringify({
-                utilisateur_id: user.id,
-                publication_id: publication_id
-            }),
-        });
+          }
+        );
+      }
 
-        // Lire la réponse une seule fois
-        const responseData = await response.text();
-        let result;
-        
-        try {
-            result = JSON.parse(responseData);
-        } catch (e) {
-            console.error("Failed to parse JSON:", responseData);
-            throw new Error("Réponse serveur invalide",e);
-        }
-
-        if (!response.ok) {
-            throw new Error(result.message || `Erreur serveur: ${response.status}`);
-        }
-
-        if (result.status !== 'success') {
-            throw new Error(result.message || "Erreur lors de l'ajout au panier", {
+      toast.success(result.message || "Article ajouté au favourite", {
         position: "top-center",
         style: {
           background: "#000",
           color: "#fff",
         },
       });
-        }
-
-        toast.success(result.message || "Article ajouté au panier", {
-          position: "top-center",
-          style: {
-            background: "#000",
-            color: "#fff",
-          },
-        });
-        return true;
-
+      return true;
     } catch (error) {
-        console.error("Erreur addToPanier:", error);
-        toast.error(error.message || "Erreur lors de l'ajout au panier", {
-          position: "top-center",
-          style: {
-            background: "#000",
-            color: "#fff",
-          },
-        });
-        return false;
+      console.error("Erreur addToPanier:", error);
+      toast.error(error.message || "Erreur lors de l'ajout au favourite", {
+        position: "top-center",
+        style: {
+          background: "#000",
+          color: "#fff",
+        },
+      });
+      return false;
     }
-};
-
-
+  };
 
   return (
     <AuthContext.Provider
