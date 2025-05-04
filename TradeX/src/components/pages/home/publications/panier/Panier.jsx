@@ -19,7 +19,9 @@ const Panier = () => {
           `http://localhost/Backend_TradeX/getPanier.php?utilisateur_id=${user.id}`,
           {
             headers: {
+              "Content-Type": "application/json",
               Accept: "application/json",
+              
             },
           }
         );
@@ -54,6 +56,7 @@ const Panier = () => {
   }, [user]);
 
   const removeFromPanier = async (publication_id) => {
+    console.log("Deleting publication ID:", publication_id);
     try {
       const response = await fetch(
         "http://localhost/Backend_TradeX/SuppPubPanier.php",
@@ -69,12 +72,15 @@ const Panier = () => {
           }),
         }
       );
-
+      
+      console.log("Response status:", response.status); // Add this
+      
       if (!response.ok) {
         const errorData = await response.json();
+        console.error("Error details:", errorData); // Add this
         throw new Error(errorData.message || "Erreur lors de la suppression");
       }
-
+  
       setPanier(panier.filter((item) => item.id !== publication_id));
       toast.success("Publication supprimée du panier!", {
         position: "top-center",
@@ -84,6 +90,7 @@ const Panier = () => {
         },
       });
     } catch (error) {
+      console.error("Full error:", error); // Add this
       toast.error(error.message, {
         position: "top-center",
         style: {
@@ -107,7 +114,28 @@ const Panier = () => {
     <div className={styles.accountPage}>
       <div className={styles.mainContent}>
         {panier.length === 0 ? (
-          <div className={styles.emptyCart}>Votre panier est vide</div>
+          <div className={styles.emptyCart}>
+          <div className={styles.emptyCartContent}>
+            <svg 
+              className={styles.emptyCartIcon}
+              xmlns="http://www.w3.org/2000/svg" 
+              width="64" 
+              height="64" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            >
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <h3>Votre favourite est vide</h3>
+            <p>Explorez nos publications pour trouver ce qui vous intéresse</p>
+          </div>
+        </div>
         ) : (
           panier.map((item) => (
             <div key={item.id} className={styles.content}>

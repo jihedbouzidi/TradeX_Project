@@ -139,8 +139,6 @@ export const Profile = () => {
     if (!validateProfileData()) return;
     if (!validatePassword()) return;
 
-    
-
     setIsSaving(true);
 
     try {
@@ -268,7 +266,7 @@ export const Profile = () => {
     <div className={styles.profile_container}>
       <Layout />
       <Toaster position="top-center" />
-      
+
       <div className={styles.top_actions}>
         <button
           className={styles.publications_button}
@@ -302,7 +300,9 @@ export const Profile = () => {
       {isSaving ? (
         <div className={styles.saving_indicator}>
           <div className={styles.loading_spinner}></div>
-          <p>Enregistrement en cours...</p>
+          <p>
+            Enregistrement en cours<span className={styles.dots}>...</span>
+          </p>
         </div>
       ) : (
         <ProfileActions

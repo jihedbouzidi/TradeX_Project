@@ -89,7 +89,28 @@ export const Home = () => {
         {!loading && !error && (
           <>
             {posts.length === 0 ? (
-              <div className={styles.noResults}>Aucune publication trouvée</div>
+              <div className={styles.noResults}>
+              <div className={styles.noResultsContent}>
+                <svg 
+                  className={styles.noResultsIcon}
+                  xmlns="http://www.w3.org/2000/svg" 
+                  width="64" 
+                  height="64" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <h3>Aucune publication trouvée</h3>
+                <p>Essayez de modifier vos critères de recherche</p>
+                
+              </div>
+            </div>
             ) : (
               posts
                 .sort((a, b) => new Date(b.date_pub) - new Date(a.date_pub))

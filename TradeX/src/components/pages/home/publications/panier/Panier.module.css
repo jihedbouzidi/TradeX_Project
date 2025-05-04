@@ -278,3 +278,12 @@
     color: #495057;
     line-height: 1.6;
   }
+  .emptyCartContent{
+    color: white;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  

@@ -502,3 +502,72 @@ button:hover {
   display: flex;
   position: relative;
 }
+.noResults{
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 200px;
+}
+.loading {
+  width: 50%;
+  margin-left: 25%;
+  margin-top: 200px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 24px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.loading::after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(79, 70, 229, 0.2);
+  border-top-color: #4f46e5;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Variante avec fond flottant animé */
+.loading::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+              rgba(255,255,255,0) 0%, 
+              rgba(79, 70, 229, 0.05) 50%, 
+              rgba(255,255,255,0) 100%);
+  animation: shimmer 2s infinite;
+  z-index: 0;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
