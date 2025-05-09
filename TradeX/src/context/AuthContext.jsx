@@ -9,4 +9,8 @@ export const AuthContext = createContext({
   updateProfile: async () => {},
   AddPublication: async () => {},
   addToPanier: async () => {},
+  deletePublication: async () => {},
+  updatePublication: async () => {},
+  getUserPublications: async () => {},
+  
 });

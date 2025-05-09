@@ -16,7 +16,7 @@ const Panier = () => {
 
       try {
         const response = await fetch(
-          `http://localhost/Backend_TradeX/getPanier.php?utilisateur_id=${user.id}`,
+          `http://localhost:80/Backend_TradeX/getPanier.php?utilisateur_id=${user.id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -34,6 +34,7 @@ const Panier = () => {
         }
 
         const data = await response.json();
+        console.log("Panier data:", data); // Log the fetched data
         setPanier(data);
         setError(null);
       } catch (error) {

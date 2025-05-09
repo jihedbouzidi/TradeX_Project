@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
 import { toast } from "react-hot-toast";
+import { api } from "../services/api";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -306,7 +307,69 @@ export const AuthProvider = ({ children }) => {
       return false;
     }
   };
+  const deletePublication = async (publication_id) => {
+    if (!user?.id) {
+      toast.error("Veuillez vous connecter");
+      return false;
+    }
 
+    try {
+      const response = await api.post("/supprimerPub.php", {
+        publication_id,
+        utilisateur_id: user.id,
+      });
+
+      if (response.status === "success") {
+        toast.success("Publication supprimée avec succès");
+        return true;
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      toast.error(error.message || "Erreur lors de la suppression");
+      return false;
+    }
+  };
+
+  const updatePublication = async (publication_id, updatedData) => {
+    if (!user?.id) {
+      toast.error("Veuillez vous connecter");
+      return false;
+    }
+
+    try {
+      const response = await api.post("/modifierPub.php", {
+        publication_id,
+        utilisateur_id: user.id,
+        ...updatedData,
+      });
+
+      if (response.status === "success") {
+        toast.success("Publication mise à jour avec succès");
+        return true;
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      toast.error(error.message || "Erreur lors de la mise à jour");
+      return false;
+    }
+  };
+
+  const getUserPublications = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost/Backend_TradeX/getPub.php?utilisateur_id=${userId}`);
+      const data = await response.json();
+      
+      if (data.status !== "success") {
+        throw new Error(data.message || "Erreur inconnue du serveur");
+      }
+
+      return data.data;
+    } catch (error) {
+      throw new Error(`Échec de la récupération des publications: ${error.message}`);
+    }
+  };
   return (
     <AuthContext.Provider
       value={{
@@ -318,6 +381,9 @@ export const AuthProvider = ({ children }) => {
         updateProfile,
         AddPublication,
         addToPanier,
+        deletePublication,
+        updatePublication,
+        getUserPublications,
       }}
     >
       {children}
