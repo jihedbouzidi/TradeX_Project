@@ -95,7 +95,20 @@ const AddPublication = () => {
   };
 
   const onPanier = () => {
-    navigate("/panier");
+    if (!user) {
+      toast.error("Veuillez vous connecter pour ajouter une Favourite", {
+        position: "top-center",
+        style: {
+          background: "#000",
+          color: "#fff",
+        },
+      });
+      return;
+    }
+    else{
+      navigate("/panier");
+    }
+    
   };
 
   const onChatWithAI = () => {

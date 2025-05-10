@@ -73,11 +73,10 @@ const Panier = () => {
         }
       );
 
-      console.log("Response status:", response.status); // Add this
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Error details:", errorData); // Add this
+        console.error("Error details:", errorData); 
         throw new Error(errorData.message || "Erreur lors de la suppression");
       }
 

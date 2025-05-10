@@ -239,7 +239,13 @@ export const AuthProvider = ({ children }) => {
   };
   const addToPanier = async (publication_id) => {
     if (!user?.id) {
-      toast.error("Veuillez vous connecter pour ajouter au panier");
+      toast.error("Veuillez vous connecter pour ajouter au favourite",{
+        position: "top-center",
+        style: {
+          background: "#000",
+          color: "#fff",
+        },
+      });
       return false;
     }
 
@@ -266,7 +272,6 @@ export const AuthProvider = ({ children }) => {
       try {
         result = JSON.parse(responseData);
       } catch (e) {
-        console.error("Failed to parse JSON:", responseData);
         throw new Error("Réponse serveur invalide", e);
       }
 
