@@ -2,15 +2,18 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../../../hooks/useAuth";
 import { toast } from "react-hot-toast";
+import Swal from "sweetalert2";
 import styles from "./VotrePub.module.css";
+import Modal from "./Modal";
 import {
   FaTrash,
   FaEdit,
-  FaTimes,
   FaBullseye,
   FaArrowRight,
   FaDesktop,
-  FaMobileAlt,FaPlus
+  FaMobileAlt,
+  FaWhatsapp,
+  FaFacebook,
 } from "react-icons/fa";
 
 const VotrePub = () => {
@@ -48,7 +51,16 @@ const VotrePub = () => {
       setPublications(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Erreur fetchPublications:", error);
-      toast.error(error.message || "Erreur lors du chargement des publications");
+      toast.error(
+        error.message || "Erreur lors du chargement des publications",
+        {
+          position: "top-center",
+          style: {
+            background: "#000",
+            color: "#fff",
+          },
+        }
+      );
       setPublications([]);
     } finally {
       setLoading(false);
@@ -56,18 +68,35 @@ const VotrePub = () => {
   };
 
   const handleDelete = async (pubId) => {
-    if (!window.confirm("Êtes-vous sûr de vouloir supprimer cette publication ?")) {
-      return;
-    }
+    const { isConfirmed } = await Swal.fire({
+      title: "Supprimer cette publication ?",
+      html: '<div style="color: #ff6b6b; font-weight: 500;">Cette action est irréversible !</div>',
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Oui, supprimer",
+      cancelButtonText: "Annuler",
+      backdrop: "rgba(0,0,0,0.4)",
+      allowOutsideClick: false,
+    });
+
+    if (!isConfirmed) return;
 
     try {
       const success = await deletePublication(pubId);
+
       if (success) {
-        fetchPublications();
+        await fetchPublications();
       }
     } catch (error) {
-      toast.error(error.message || "Erreur lors de la suppression");
       console.error("Delete error:", error);
+      Swal.fire({
+        title: "Échec !",
+        text: error.message || "Erreur lors de la suppression",
+        icon: "error",
+        confirmButtonColor: "#3085d6",
+      });
     }
   };
 
@@ -84,13 +113,20 @@ const VotrePub = () => {
     setShowModal(true);
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   const handleImageClick = (imageUrl, index) => {
     setSelectedImage(imageUrl);
     setCurrentImageIndex(index);
   };
 
   const closeImageModal = (e) => {
-    if (e.target === e.currentTarget || e.target.classList.contains("closeButton")) {
+    if (
+      e.target === e.currentTarget ||
+      e.target.classList.contains("closeButton")
+    ) {
       setSelectedImage(null);
     }
   };
@@ -100,60 +136,14 @@ const VotrePub = () => {
 
     let newIndex;
     if (direction === "prev") {
-      newIndex = (currentImageIndex - 1 + existingImages.length) % existingImages.length;
+      newIndex =
+        (currentImageIndex - 1 + existingImages.length) % existingImages.length;
     } else {
       newIndex = (currentImageIndex + 1) % existingImages.length;
     }
 
     setSelectedImage(existingImages[newIndex].chemin);
     setCurrentImageIndex(newIndex);
-  };
-
-  const handleUpdate = async () => {
-    try {
-      // Prepare images data
-      const formData = new FormData();
-      images.forEach((image) => {
-        formData.append("images[]", image);
-      });
-
-      // First upload new images if any
-      let newImagePaths = [];
-      if (images.length > 0) {
-        const uploadResponse = await fetch(
-          "http://localhost/Backend_TradeX/upload.php",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-        const uploadResult = await uploadResponse.json();
-        if (!uploadResponse.ok) {
-          throw new Error(uploadResult.message || "Failed to upload images");
-        }
-        newImagePaths = uploadResult.paths || [];
-      }
-
-      // Prepare updated data
-      const updatedData = {
-        type_app,
-        description,
-        objectif,
-        facebook: facebookLink,
-        whatsapp: whatsappNumber,
-        images_to_delete: imagesToDelete,
-        new_images: newImagePaths,
-      };
-
-      const success = await updatePublication(currentPub.id, updatedData);
-      if (success) {
-        setShowModal(false);
-        fetchPublications();
-      }
-    } catch (error) {
-      toast.error(error.message || "Erreur lors de la mise à jour");
-      console.error("Update error:", error);
-    }
   };
 
   const handleRemoveExistingImage = (imageId) => {
@@ -175,9 +165,49 @@ const VotrePub = () => {
     setImages(newImages);
   };
 
+  const handleUpdate = async () => {
+    try {
+      // Prepare images data
+      const formData = new FormData();
+      images.forEach((image) => {
+        formData.append("images[]", image);
+      });
+      const imagePaths = images.map((image) => {
+        if (image instanceof File) {
+          return image.name;
+        }
+        return image.split("/").pop();
+      });
+      // Prepare updated data
+      const updatedData = {
+        type_app,
+        description,
+        objectif,
+        facebook: facebookLink,
+        whatsapp: whatsappNumber,
+        images_to_delete: imagesToDelete,
+        new_images: imagePaths,
+      };
+
+      const success = await updatePublication(currentPub.id, updatedData);
+      if (success) {
+        setShowModal(false);
+        fetchPublications();
+      }
+    } catch (error) {
+      toast.error(error.message || "Erreur lors de la mise à jour", {
+        position: "top-center",
+        style: {
+          background: "#000",
+          color: "#fff",
+        },
+      });
+      console.error("Update error:", error);
+    }
+  };
+
   return (
     <>
-      <br />
       <br />
       <br />
       <br />
@@ -195,13 +225,19 @@ const VotrePub = () => {
                 <div className={styles.deviceType}>
                   {pub.type_app === "pc" ? (
                     <>
-                      <FaDesktop style={{fontSize:"30px"}} className={styles.deviceIcon} />
-                      <span style={{fontSize:"30px"}}>PC</span>
+                      <FaDesktop
+                        style={{ fontSize: "30px" }}
+                        className={styles.deviceIcon}
+                      />
+                      <span style={{ fontSize: "30px" }}>PC</span>
                     </>
                   ) : (
                     <>
-                      <FaMobileAlt style={{fontSize:"30px"}} className={styles.deviceIcon} />
-                      <span style={{fontSize:"30px"}}>Mobile</span>
+                      <FaMobileAlt
+                        style={{ fontSize: "30px" }}
+                        className={styles.deviceIcon}
+                      />
+                      <span style={{ fontSize: "30px" }}>Mobile</span>
                     </>
                   )}
                 </div>
@@ -242,6 +278,7 @@ const VotrePub = () => {
                   </>
                 )}
                 <div className={styles.objectifContainer}>
+                
                   <div className={styles.objectifHeader}>
                     <FaBullseye className={styles.objectifIcon} />
                     <h3 style={{ color: "green", marginLeft: "8px" }}>
@@ -255,24 +292,27 @@ const VotrePub = () => {
                 </div>
                 <hr />
                 <div className={styles.publicationContacts}>
+                  
+                  {pub.whatsapp && (
+                    <a
+                      href={pub.whatsapp}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.whatsappButton}
+                    >
+                      <FaWhatsapp className={styles.icon} />
+                      WhatsApp
+                    </a>
+                  )}
                   {pub.facebook && (
                     <a
                       href={pub.facebook}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={styles.contactLink}
+                      className={styles.facebookButton}
                     >
+                      <FaFacebook className={styles.icon} />
                       Facebook
-                    </a>
-                  )}
-                  {pub.whatsapp && (
-                    <a
-                      href={`https://wa.me/${pub.whatsapp.replace(/\D/g, "")}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.contactLink}
-                    >
-                      WhatsApp
                     </a>
                   )}
                 </div>
@@ -329,130 +369,28 @@ const VotrePub = () => {
         </div>
       )}
 
-{showModal && (
-  <div className={styles.modalOverlay}>
-    <div className={styles.modal}>
-      <div className={styles.modalContent}>
-        <div className={styles.modalHeader}>
-          <h2>Modifier la Publication</h2>
-          <button className={styles.modalClose} onClick={() => setShowModal(false)}>
-            <FaTimes />
-          </button>
-        </div>
-
-        <div className={styles.modalBody}>
-          {/* Type appareil */}
-          <div className={styles.formGroup}>
-            <label>Type d{"'"}appareil</label>
-            <select
-              value={type_app}
-              onChange={(e) => setType_app(e.target.value)}
-              className={styles.formControl}
-            >
-              <option value="">Sélectionnez un type</option>
-              <option value="pc">PC</option>
-              <option value="mobile">Mobile</option>
-            </select>
-          </div>
-
-          {/* Description */}
-          <div className={styles.formGroup}>
-            <label>Description</label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className={styles.formControl}
-              rows={5}
-            />
-          </div>
-
-          {/* Objectif */}
-          <div className={styles.formGroup}>
-            <label>Objectif</label>
-            <textarea
-              value={objectif}
-              onChange={(e) => setObjectif(e.target.value)}
-              className={styles.formControl}
-              rows={3}
-            />
-          </div>
-
-          {/* Contacts - organisé en ligne */}
-          <div className={styles.formGroup}>
-            <label>Contacts</label>
-            <div className={styles.formRow}>
-              <div className={styles.formGroup}>
-                <input
-                  type="url"
-                  value={facebookLink}
-                  onChange={(e) => setFacebookLink(e.target.value)}
-                  placeholder="Lien Facebook"
-                  className={styles.formControl}
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <input
-                  type="tel"
-                  value={whatsappNumber}
-                  onChange={(e) => setWhatsappNumber(e.target.value)}
-                  placeholder="Numéro WhatsApp"
-                  className={styles.formControl}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Images */}
-          <div className={styles.formGroup}>
-            <label>Images ({existingImages.length - imagesToDelete.length + images.length}/4)</label>
-            <div className={styles.imageUploadContainer}>
-              <label className={styles.uploadButton}>
-                <FaPlus /> Ajouter des images
-                <input
-                style={{height:"80px",width:"80px" }}
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className={styles.fileInput}
-                  disabled={existingImages.length - imagesToDelete.length + images.length >= 4}
-                />
-              </label>
-            </div>
-            
-            <div className={styles.imagePreviews}>
-              {/* Afficher les images existantes et nouvelles */}
-              {[...existingImages, ...images].map((img, index) => (
-                <div key={index} className={styles.imagePreview}>
-                  <img
-                    src={img.chemin || URL.createObjectURL(img)}
-                    alt="Preview"
-                    className={styles.previewImage}
-                  />
-                  <button
-                    className={styles.removeImageButton}
-                    onClick={() => img.id ? handleRemoveExistingImage(img.id) : removeImage(index - existingImages.length)}
-                  >
-                    <FaTimes />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.modalFooter}>
-          <button className={styles.cancelButton} onClick={() => setShowModal(false)}>
-            Annuler
-          </button>
-          <button className={styles.saveButton} onClick={handleUpdate}>
-            Enregistrer
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+      {showModal && (
+        <Modal
+          onClose={handleCloseModal}
+          onPublish={handleUpdate}
+          type_app={type_app}
+          setType_app={setType_app}
+          description={description}
+          setDescription={setDescription}
+          objectif={objectif}
+          setObjectif={setObjectif}
+          images={images}
+          facebookLink={facebookLink}
+          setFacebookLink={setFacebookLink}
+          whatsappNumber={whatsappNumber}
+          setWhatsappNumber={setWhatsappNumber}
+          existingImages={existingImages}
+          imagesToDelete={imagesToDelete}
+          handleRemoveExistingImage={handleRemoveExistingImage}
+          handleImageChange={handleImageChange}
+          removeImage={removeImage}
+        />
+      )}
     </>
   );
 };

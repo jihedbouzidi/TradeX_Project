@@ -94,7 +94,7 @@ const App = () => {
                 </>
               }
             />
-            <Route path="/panier" element={<Panier />} />
+            <Route path="/panier" element={<><NavBar /><Panier /> </>} />
             <Route path="/chat" element={<CharWithAI />} />
             <Route
               path="/votrePub"

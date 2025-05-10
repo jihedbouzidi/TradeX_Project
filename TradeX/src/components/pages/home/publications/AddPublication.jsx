@@ -70,7 +70,8 @@ const AddPublication = () => {
         whatsappLink,
         imagePaths
       );
-  
+
+      navigate(0);
       if (result && result.status === "success") {
         setDescription("");
         setObjectif("");

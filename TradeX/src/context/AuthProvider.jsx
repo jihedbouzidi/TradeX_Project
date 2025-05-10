@@ -320,7 +320,13 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (response.status === "success") {
-        toast.success("Publication supprimée avec succès");
+        toast.success("Publication supprimée avec succès",{
+          position: "top-center",
+          style: {
+            background: "#000",
+            color: "#fff",
+          },
+        });
         return true;
       } else {
         throw new Error(response.message);
@@ -345,7 +351,13 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (response.status === "success") {
-        toast.success("Publication mise à jour avec succès");
+        toast.success("Publication mise à jour avec succès",{
+          position: "top-center",
+          style: {
+            background: "#000",
+            color: "#fff",
+          },
+        });
         return true;
       } else {
         throw new Error(response.message);
