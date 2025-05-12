@@ -33,7 +33,7 @@ export const Home = () => {
         params.type = filters.type;
       }
 
-      const response = await api.get("/AffPublication.php", params);
+      const response = await api.get("/Controllers/AffPublication.php", params);
       
       if (response && response.publications) {
         setPosts(

@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await fetch(
-        "http://localhost/Backend_TradeX/login.php",
+        "http://localhost/Backend_TradeX/model/login.php",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (nomPre, email, password) => {
     try {
       const response = await fetch(
-        "http://localhost/Backend_TradeX/register.php",
+        "http://localhost/Backend_TradeX/model/register.php",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -126,7 +126,7 @@ export const AuthProvider = ({ children }) => {
   const updateProfile = async (formData) => {
     try {
       const response = await fetch(
-        "http://localhost/Backend_TradeX/modifierPro.php",
+        "http://localhost/Backend_TradeX/Controllers/modifierPro.php",
         {
           method: "POST",
           body: formData, // FormData est envoyé directement sans en-tête Content-Type
@@ -181,7 +181,7 @@ export const AuthProvider = ({ children }) => {
   ) => {
     try {
       const response = await fetch(
-        "http://localhost/Backend_TradeX/AddPublication.php",
+        "http://localhost/Backend_TradeX/Controllers/AddPublication.php",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -251,7 +251,7 @@ export const AuthProvider = ({ children }) => {
 
     try {
       const response = await fetch(
-        "http://localhost/Backend_TradeX/AddPanier.php",
+        "http://localhost/Backend_TradeX/Controllers/AddPanier.php",
         {
           method: "POST",
           headers: {
@@ -319,7 +319,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const response = await api.post("/supprimerPub.php", {
+      const response = await api.post("/Controllers/supprimerPub.php", {
         publication_id,
         utilisateur_id: user.id,
       });
@@ -349,7 +349,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const response = await api.post("/modifierPub.php", {
+      const response = await api.post("/Controllers/modifierPub.php", {
         publication_id,
         utilisateur_id: user.id,
         ...updatedData,
@@ -375,7 +375,7 @@ export const AuthProvider = ({ children }) => {
 
   const getUserPublications = async (userId) => {
     try {
-      const response = await fetch(`http://localhost/Backend_TradeX/getPub.php?utilisateur_id=${userId}`);
+      const response = await fetch(`http://localhost/Backend_TradeX/Controllers/getPub.php?utilisateur_id=${userId}`);
       const data = await response.json();
       
       if (data.status !== "success") {

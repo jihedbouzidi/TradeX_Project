@@ -16,7 +16,7 @@ const Panier = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:80/Backend_TradeX/getPanier.php?utilisateur_id=${user.id}`,
+          `http://localhost:80/Backend_TradeX/Controllers/getPanier.php?utilisateur_id=${user.id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -59,7 +59,7 @@ const Panier = () => {
     console.log("Deleting publication ID:", publication_id);
     try {
       const response = await fetch(
-        "http://localhost/Backend_TradeX/SuppPubPanier.php",
+        "http://localhost/Backend_TradeX/Controllers/SuppPubPanier.php",
         {
           method: "POST",
           headers: {
