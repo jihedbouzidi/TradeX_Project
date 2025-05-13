@@ -35,7 +35,7 @@ export const ChatWithAI = () => {
   const callOpenRouterAPI = async (query) => {
     try {
       const response = await fetch(
-        "http://localhost/Backend_TradeX/model/ai-chat.php",
+        "http://localhost/Backend_TradeX/Controllers/ai-chat.php",
         {
           method: "POST",
           headers: {

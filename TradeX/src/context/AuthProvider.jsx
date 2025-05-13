@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await fetch(
-        "http://localhost/Backend_TradeX/model/login.php",
+        "http://localhost/Backend_TradeX/Controllers/login.php",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (nomPre, email, password) => {
     try {
       const response = await fetch(
-        "http://localhost/Backend_TradeX/model/register.php",
+        "http://localhost/Backend_TradeX/Controllers/register.php",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
